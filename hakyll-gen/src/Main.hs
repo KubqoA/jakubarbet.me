@@ -1,10 +1,15 @@
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
-import           Data.Monoid (mappend)
-import           Hakyll
+module Main (main) where
+import Control.Monad (forM_)
+import Data.List (isSuffixOf)
+import Data.Monoid (mappend)
+import Hakyll
+import System.FilePath.Posix (takeBaseName,takeDirectory,(</>))
 
 
 -- Config
+--------------------------------------------------------------------------------
 siteName :: String
 siteName = "Jakub Arbet"
 
@@ -19,22 +24,38 @@ config = defaultConfiguration
     , tmpDirectory = "hakyll-gen/_tmp"
     }
 
+staticAssets :: [Pattern]
+staticAssets = [ "favicon.ico"
+               , "favicon.svg"
+               , "mask-icon.svg"
+               , "apple-touch-icon.png"
+               , "manifest.json"
+               , "google-touch-icon.png"
+               , "images/*"
+               ]
+
+pages :: [Identifier]
+pages = [ "about.md", "contact.md" ]
+
+-- Main generator
 --------------------------------------------------------------------------------
 main :: IO ()
 main = hakyllWith config $ do
-    match "images/*" $ do
-        route   idRoute
+    matchEach staticAssets $ do
+        route idRoute
         compile copyFileCompiler
+
+    match (fromList pages) $ do
+        route cleanRoute
+        compile
+            $   pandocCompiler
+            >>= loadAndApplyTemplate "templates/default.html" defaultContext
+            >>= relativizeUrls
+            >>= cleanIndexUrls
 
     match "css/*" $ do
         route   idRoute
         compile compressCssCompiler
-
-    match (fromList ["about.rst", "contact.markdown"]) $ do
-        route   $ setExtension "html"
-        compile $ pandocCompiler
-            >>= loadAndApplyTemplate "templates/default.html" defaultContext
-            >>= relativizeUrls
 
     match "posts/*" $ do
         route $ setExtension "html"
@@ -70,12 +91,31 @@ main = hakyllWith config $ do
                 >>= applyAsTemplate indexCtx
                 >>= loadAndApplyTemplate "templates/default.html" indexCtx
                 >>= relativizeUrls
+                >>= cleanIndexUrls
 
     match "templates/*" $ compile templateBodyCompiler
 
 
+-- Utils
 --------------------------------------------------------------------------------
 postCtx :: Context String
-postCtx =
-    dateField "date" "%B %e, %Y" `mappend`
-    defaultContext
+postCtx = dateField "date" "%B %e, %Y" <> defaultContext
+
+matchEach :: [Pattern] -> Rules () -> Rules ()
+matchEach patterns = forM_ staticAssets . flip match
+
+-- Inspired by: https://www.rohanjain.in/hakyll-clean-urls/
+cleanRoute :: Routes
+cleanRoute = customRoute $ wrapFolder . toFilePath
+  where
+    wrapFolder :: FilePath -> FilePath
+    wrapFolder path = takeDirectory path </> takeBaseName path </> "index.html"
+
+cleanIndexUrls :: Item String -> Compiler (Item String)
+cleanIndexUrls = return . fmap (withUrls $ removeSuffix "index.html")
+
+removeSuffix :: String -> String -> String
+removeSuffix suffix str = if suffix `isSuffixOf` str
+                             then take (length str - length suffix) str
+                             else str
+
