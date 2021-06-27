@@ -4,9 +4,24 @@ import           Data.Monoid (mappend)
 import           Hakyll
 
 
+-- Config
+siteName :: String
+siteName = "Jakub Arbet"
+
+config :: Configuration
+config = defaultConfiguration
+    { destinationDirectory = "dist"
+    , ignoreFile = const False
+    , previewHost = "127.0.0.1"
+    , previewPort = 8000
+    , providerDirectory = "src"
+    , storeDirectory = "hakyll-gen/_cache"
+    , tmpDirectory = "hakyll-gen/_tmp"
+    }
+
 --------------------------------------------------------------------------------
 main :: IO ()
-main = hakyll $ do
+main = hakyllWith config $ do
     match "images/*" $ do
         route   idRoute
         compile copyFileCompiler

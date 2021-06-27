@@ -1,0 +1,5 @@
+.ghc.environment.*
+_cache
+_tmp
+dist
+node_modules

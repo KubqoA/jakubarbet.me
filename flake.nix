@@ -17,14 +17,20 @@
         inherit (pkgs.haskellPackages) callCabal2nix; 
         inherit (pkgs.stdenv) mkDerivation;
       in rec {
-        packages = { inherit (pkgs.haskellPackages') site; };
+        packages = { inherit (pkgs.haskellPackages') hakyll-gen site; };
         defaultPackage = packages.site;
 
+        apps.site = flake-utils.lib.mkApp {
+          drv = packages.generator;
+          exePath = "/bin/hakyll-gen";
+        };
+        defaultApp = apps.site;
+
         devShell = pkgs.haskellPackages'.shellFor {
-          packages = hp': [ hp'.site ];
+          packages = hp': [ hp'.hakyll-gen ];
 
           buildInputs = with pkgs.haskellPackages'; [
-            site
+            hakyll-gen
             ghcid
             haskell-language-server
             hlint
