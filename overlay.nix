@@ -1,32 +1,43 @@
-final: prev:
-let
-  pkgs = prev;
-in {
+{ self, system }:
+
+final: prev: {
   haskellPackages' = prev.haskellPackages.override {
-    overrides = hpFinal: hpPrev: rec {
-      hakyll-gen = hpPrev.callCabal2nix "hakyll-gen" ./hakyll-gen {};
-
-      site = pkgs.stdenv.mkDerivation {
-        name = "site";
-        buildInputs = [ hakyll-gen ];
-        src = pkgs.nix-gitignore.gitignoreSourcePure [
-          ./.gitignore
-          # Ignored files cannot be referenced via a path, but via string
-          ".git"
-          ".direnv"
-        ] ./.;
-
-        LANG = "en_US.UTF-8";
-
-        buildPhase = ''
-          hakyll-gen build --verbose
-        '';
-
-        installPhase = ''
-          mkdir -p "$out/dist"
-          cp -r dist/* "$out/dist"
-        '';
-      };
+    overrides = hpFinal: hpPrev: {
+      buildtools-hakyll = hpPrev.callCabal2nix "buildtools-hakyll" ./buildtools/hakyll {};
     };
   };
+
+  buildtools-css = import ./buildtools/css {
+    inherit system;
+    pkgs = prev;
+  };
+
+  # Wrapper around ‹haskellPackages'.buildtools-hakyll› that sets additional environment
+  # variables, so that ‹buildtools-css› can be properly used
+  buildtools-hakyll = prev.symlinkJoin {
+    name = "buildtools-hakyll";
+    paths = with final; [
+      haskellPackages'.buildtools-hakyll
+      buildtools-css.shell.nodeDependencies
+      buildtools-css.package
+    ];
+    buildInputs = [ prev.makeWrapper ];
+    postBuild = ''
+      wrapProgram $out/bin/buildtools-hakyll \
+        --set POSTCSS_MODULES "${final.buildtools-css.shell.nodeDependencies}/lib/node_modules" \
+        --prefix NODE_PATH : ${final.buildtools-css.shell.nodeDependencies}/lib/node_modules \
+        --prefix PATH : ${final.buildtools-css.shell.nodeDependencies}/bin
+    '';
+  };
+
+  build-site = let
+    command = "buildtools-hakyll rebuild";
+    paths = with final; [ buildtools-hakyll git ];
+    args = map (p: "--prefix PATH : ${p}/bin") paths;
+  in prev.runCommand "build-site" {
+    f = prev.writeScript "build-site-unwrapped" command;
+    buildInputs = [ prev.makeWrapper ];
+  } ''
+    makeWrapper "$f" "$out"/bin/build-site ${builtins.toString args}
+  '';
 }

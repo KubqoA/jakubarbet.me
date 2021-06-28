@@ -10,29 +10,32 @@
   outputs = { flake-utils, nixpkgs, self }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        haskellPackagesOverlay = import ./overlay.nix;
-        overlays = [ haskellPackagesOverlay ];
-        pkgs = import nixpkgs { inherit system overlays; };
+        overlay = import ./overlay.nix { inherit self system; };
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [ overlay ];
+        };
 
         inherit (pkgs.haskellPackages) callCabal2nix; 
         inherit (pkgs.stdenv) mkDerivation;
       in rec {
-        packages = { inherit (pkgs.haskellPackages') hakyll-gen site; };
-        defaultPackage = packages.site;
-
-        apps.site = flake-utils.lib.mkApp {
-          drv = packages.generator;
-          exePath = "/bin/hakyll-gen";
+        packages = {
+          inherit (pkgs) buildtools-css buildtools-hakyll build-site;
         };
-        defaultApp = apps.site;
+        defaultPackage = packages.build-site;
+
+        apps.build-site = flake-utils.lib.mkApp {
+          drv = packages.build-site;
+        };
+        defaultApp = apps.build-site;
 
         devShell = pkgs.haskellPackages'.shellFor {
-          packages = hp': [ hp'.hakyll-gen ];
+          packages = hp': [ hp'.buildtools-hakyll ];
 
           buildInputs = (with pkgs; [
-            nodejs
+            buildtools-hakyll
+            git
           ]) ++ (with pkgs.haskellPackages'; [
-            hakyll-gen
             ghcid
             haskell-language-server
             hlint
@@ -40,6 +43,12 @@
           ]);
 
           withHoogle = true;
+
+          shellHook = ''
+            export POSTCSS_MODULES="${pkgs.buildtools-css.shell.nodeDependencies}/lib/node_modules" \
+            export NODE_PATH="$NODE_PATH:${pkgs.buildtools-css.shell.nodeDependencies}/lib/node_modules" \
+            export PATH="$PATH:${pkgs.buildtools-css.shell.nodeDependencies}/bin"
+          '';
         };
       });
 }

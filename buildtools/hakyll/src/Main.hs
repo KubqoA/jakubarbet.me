@@ -7,7 +7,6 @@ import Control.Monad (forM_)
 import Data.Char (isSpace)
 import Data.List (dropWhileEnd, isSuffixOf)
 import Data.Monoid (mappend)
-import qualified Data.Text as T
 import Hakyll
 import System.Exit (ExitCode (ExitSuccess))
 import System.FilePath.Posix (takeBaseName, takeDirectory, (</>))
@@ -27,8 +26,8 @@ config =
       previewHost = "127.0.0.1",
       previewPort = 8000,
       providerDirectory = "src",
-      storeDirectory = "hakyll-gen/_cache",
-      tmpDirectory = "hakyll-gen/_tmp"
+      storeDirectory = "buildtools/_cache",
+      tmpDirectory = "buildtools/_tmp"
     }
 
 feedConfig :: FeedConfiguration
@@ -59,7 +58,7 @@ pages = ["about.md"]
 postCssCompiler :: Compiler (Item String)
 postCssCompiler = getResourceFilePath >>= unsafeCompiler . runPostCss >>= makeItem
   where
-    runPostCss file = runCommand "./node_modules/.bin/postcss" [file]
+    runPostCss file = runCommand "postcss" [file]
 
 type FeedRender = FeedConfiguration -> Context String -> [Item String] -> Compiler (Item String)
 

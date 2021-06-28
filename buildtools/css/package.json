@@ -1,0 +1,15 @@
+{
+  "name": "buildtools-css",
+  "version": "0.1.0",
+  "author": "Jakub Arbet <hi@jakubarbet.me>",
+  "license": "Unlicense",
+  "repository": "github:KubqoA/jakubarbet.me",
+  "description": "",
+  "dependencies": {
+    "autoprefixer": "^10.2.6",
+    "cssnano": "^5.0.6",
+    "postcss": "^8.3.5",
+    "postcss-cli": "^8.3.1",
+    "tailwindcss": "^2.2.4"
+  }
+}
