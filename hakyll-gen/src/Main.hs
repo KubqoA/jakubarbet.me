@@ -66,6 +66,18 @@ postContext = dateField "date" "%B %e, %Y"
            <> estimatedReadingTimeField
            <> baseContext
 
+indexContext :: Context String
+indexContext = listField "posts" postContext (recentFirst =<< loadAll "posts/*")
+            <> baseContext
+
+blogContext :: Context String
+blogContext = listField "posts" postContext (recentFirst =<< loadAll "posts/*") 
+           <> constField "title" "Blog"
+           <> baseContext
+
+projectsContext :: Context String
+projectsContext = constField "title" "Projects" <> baseContext
+
 -- Main generator
 --------------------------------------------------------------------------------
 main :: IO ()
@@ -74,17 +86,16 @@ main = hakyllWith config $ do
         route idRoute
         compile copyFileCompiler
 
-    match (fromList pages) $ do
-        route cleanRoute
-        compile
-            $   pandocCompiler
-            >>= loadAndApplyTemplate "templates/default.html" baseContext
-            >>= relativizeUrls
-            >>= cleanIndexUrls
-
     match "assets/css/style.css" $ do
         route $ setExtension "css"
         compile postCssCompiler
+
+    match (fromList pages) $ do
+        route cleanRoute
+        compile $ pandocCompiler
+            >>= loadAndApplyTemplate "templates/default.html" baseContext
+            >>= relativizeUrls
+            >>= cleanIndexUrls
 
     match "posts/*" $ do
         route cleanRoute
@@ -92,36 +103,31 @@ main = hakyllWith config $ do
             >>= loadAndApplyTemplate "templates/post.html"    postContext
             >>= loadAndApplyTemplate "templates/default.html" postContext
             >>= relativizeUrls
+            >>= cleanIndexUrls
 
-    create ["blog.html"] $ do
+    match "blog.html" $ do
         route cleanRoute
-        compile $ do
-            posts <- recentFirst =<< loadAll "posts/*"
-            let archiveCtx =
-                    listField "posts" postContext (return posts)
-                 <> constField "title" "Blog"
-                 <> baseContext
+        compile $ getResourceBody
+            >>= applyAsTemplate blogContext
+            >>= loadAndApplyTemplate "templates/default.html" blogContext
+            >>= relativizeUrls
+            >>= cleanIndexUrls
 
-            makeItem ""
-                >>= loadAndApplyTemplate "templates/blog.html" archiveCtx
-                >>= loadAndApplyTemplate "templates/default.html" archiveCtx
-                >>= relativizeUrls
-                >>= cleanIndexUrls
-
+    match "projects.html" $ do
+        route cleanRoute
+        compile $ getResourceBody
+            >>= applyAsTemplate projectsContext
+            >>= loadAndApplyTemplate "templates/default.html" projectsContext
+            >>= relativizeUrls
+            >>= cleanIndexUrls
 
     match "index.html" $ do
         route idRoute
-        compile $ do
-            posts <- recentFirst =<< loadAll "posts/*"
-            let indexCtx =
-                    listField "posts" postContext (return posts) `mappend`
-                    baseContext
-
-            getResourceBody
-                >>= applyAsTemplate indexCtx
-                >>= loadAndApplyTemplate "templates/default.html" indexCtx
-                >>= relativizeUrls
-                >>= cleanIndexUrls
+        compile $ getResourceBody
+            >>= applyAsTemplate indexContext
+            >>= loadAndApplyTemplate "templates/default.html" indexContext
+            >>= relativizeUrls
+            >>= cleanIndexUrls
 
     match "templates/*" $ compile templateBodyCompiler
 
