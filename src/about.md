@@ -1,4 +1,5 @@
 ---
+part: About
 title: About Me
 ---
 

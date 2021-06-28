@@ -29,13 +29,15 @@
         devShell = pkgs.haskellPackages'.shellFor {
           packages = hp': [ hp'.hakyll-gen ];
 
-          buildInputs = with pkgs.haskellPackages'; [
+          buildInputs = (with pkgs; [
+            nodejs
+          ]) ++ (with pkgs.haskellPackages'; [
             hakyll-gen
             ghcid
             haskell-language-server
             hlint
             ormolu
-          ];
+          ]);
 
           withHoogle = true;
         };

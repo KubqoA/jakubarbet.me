@@ -5,6 +5,8 @@ import Control.Monad (forM_)
 import Data.List (isSuffixOf)
 import Data.Monoid (mappend)
 import Hakyll
+import System.Exit (ExitCode(ExitSuccess))
+import System.Process (readProcessWithExitCode)
 import System.FilePath.Posix (takeBaseName,takeDirectory,(</>))
 
 
@@ -25,17 +27,25 @@ config = defaultConfiguration
     }
 
 staticAssets :: [Pattern]
-staticAssets = [ "favicon.ico"
-               , "favicon.svg"
-               , "mask-icon.svg"
-               , "apple-touch-icon.png"
-               , "manifest.json"
-               , "google-touch-icon.png"
-               , "images/*"
+staticAssets = [ "manifest.json"
+               , "assets/images/*"
+               , "pubkey.txt"
                ]
 
 pages :: [Identifier]
 pages = [ "about.md", "contact.md" ]
+
+
+-- Compilers
+--------------------------------------------------------------------------------
+postCssCompiler :: Compiler (Item String)
+postCssCompiler = getResourceFilePath >>= unsafeCompiler . runPostCss >>= makeItem
+
+runPostCss :: FilePath -> IO String
+runPostCss file = do
+    (exitCode, stdout, stderr) <- readProcessWithExitCode "./node_modules/.bin/postcss" [ file ] ""
+    if exitCode == ExitSuccess then return stdout else error stderr
+
 
 -- Main generator
 --------------------------------------------------------------------------------
@@ -52,6 +62,10 @@ main = hakyllWith config $ do
             >>= loadAndApplyTemplate "templates/default.html" defaultContext
             >>= relativizeUrls
             >>= cleanIndexUrls
+
+    match "assets/css/style.css" $ do
+        route $ setExtension "css"
+        compile postCssCompiler
 
     match "css/*" $ do
         route   idRoute
