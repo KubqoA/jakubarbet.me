@@ -1,11 +1,10 @@
 <article>
-    <section class="header">
-        Posted on $date$
-        $if(author)$
-            by $author$
-        $endif$
+    <section class="mb-3 text-sm text-gray-600 uppercase tracking-wide">
+        $date$
+        &middot;
+        $estimatedReadingTime$ min read
     </section>
-    <section>
+    <section class="text-lg">
         $body$
     </section>
 </article>

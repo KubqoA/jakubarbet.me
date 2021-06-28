@@ -5,6 +5,7 @@ import Control.Monad (forM_)
 import Data.Char (isSpace)
 import Data.List (dropWhileEnd, isSuffixOf)
 import Data.Monoid (mappend)
+import qualified Data.Text as T
 import Hakyll
 import System.Exit (ExitCode(ExitSuccess))
 import System.Process (readProcessWithExitCode)
@@ -13,9 +14,6 @@ import System.FilePath.Posix (takeBaseName,takeDirectory,(</>))
 
 -- Config
 --------------------------------------------------------------------------------
-siteName :: String
-siteName = "Jakub Arbet"
-
 config :: Configuration
 config = defaultConfiguration
     { destinationDirectory = "dist"
@@ -34,8 +32,10 @@ staticAssets = [ "manifest.json"
                ]
 
 pages :: [Identifier]
-pages = [ "about.md", "contact.md" ]
+pages = [ "about.md" ]
 
+wordsPerMinute :: Int
+wordsPerMinute = 200
 
 -- Compilers
 --------------------------------------------------------------------------------
@@ -45,18 +45,26 @@ postCssCompiler = getResourceFilePath >>= unsafeCompiler . runPostCss >>= makeIt
 runPostCss :: FilePath -> IO String
 runPostCss file = runCommand "./node_modules/.bin/postcss" [ file ]
 
+
+-- Fields
+--------------------------------------------------------------------------------
+gitField :: GitInformation -> Context String
+gitField information = field ("git" ++ show information) $ const $ unsafeCompiler $ getGitInformation information
+
+estimatedReadingTimeField :: Context String
+estimatedReadingTimeField = field "estimatedReadingTime" $ return . show . (`roundDiv` wordsPerMinute) . length . words . itemBody
+
 -- Contexts
 --------------------------------------------------------------------------------
-gitContext :: Context String
-gitContext = field "git-hash"   (const $ unsafeCompiler $ getGitInformation Hash)
-          <> field "git-commit" (const $ unsafeCompiler $ getGitInformation Commit)
-
 baseContext :: Context String
-baseContext = gitContext <> defaultContext
+baseContext = gitField Hash
+           <> gitField Commit
+           <> defaultContext
 
 postContext :: Context String
-postContext = dateField "date" "%B %e, %Y" <> baseContext
-
+postContext = dateField "date" "%B %e, %Y"
+           <> estimatedReadingTimeField
+           <> baseContext
 
 -- Main generator
 --------------------------------------------------------------------------------
@@ -78,28 +86,24 @@ main = hakyllWith config $ do
         route $ setExtension "css"
         compile postCssCompiler
 
-    match "css/*" $ do
-        route   idRoute
-        compile compressCssCompiler
-
     match "posts/*" $ do
-        route $ setExtension "html"
+        route cleanRoute
         compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/post.html"    postContext
             >>= loadAndApplyTemplate "templates/default.html" postContext
             >>= relativizeUrls
 
-    create ["archive.html"] $ do
-        route idRoute
+    create ["blog.html"] $ do
+        route cleanRoute
         compile $ do
             posts <- recentFirst =<< loadAll "posts/*"
             let archiveCtx =
-                    listField "posts" postContext (return posts) `mappend`
-                    constField "title" "Archives"            `mappend`
-                    baseContext
+                    listField "posts" postContext (return posts)
+                 <> constField "title" "Blog"
+                 <> baseContext
 
             makeItem ""
-                >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
+                >>= loadAndApplyTemplate "templates/blog.html" archiveCtx
                 >>= loadAndApplyTemplate "templates/default.html" archiveCtx
                 >>= relativizeUrls
 
@@ -146,7 +150,10 @@ runCommand cmd args = do
     (exitCode, stdout, stderr) <- readProcessWithExitCode cmd args ""
     if exitCode == ExitSuccess then return stdout else error stderr
 
-data GitInformation = Hash | Commit
+rtrim :: String -> String
+rtrim = dropWhileEnd isSpace
+
+data GitInformation = Hash | Commit deriving (Show)
 
 getFormat :: GitInformation -> String
 getFormat Hash = "%h"
@@ -155,5 +162,5 @@ getFormat Commit = "%s"
 getGitInformation :: GitInformation -> IO String
 getGitInformation x = rtrim <$> runCommand "git" [ "log", "-1", "--format=" ++ getFormat x ]
 
-rtrim :: String -> String
-rtrim = dropWhileEnd isSpace
+roundDiv :: Int -> Int -> Int
+x `roundDiv` y = round (fromIntegral x / fromIntegral y)
