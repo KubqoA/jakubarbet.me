@@ -2,7 +2,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main (main) where
 import Control.Monad (forM_)
-import Data.List (isSuffixOf)
+import Data.Char (isSpace)
+import Data.List (dropWhileEnd, isSuffixOf)
 import Data.Monoid (mappend)
 import Hakyll
 import System.Exit (ExitCode(ExitSuccess))
@@ -42,9 +43,19 @@ postCssCompiler :: Compiler (Item String)
 postCssCompiler = getResourceFilePath >>= unsafeCompiler . runPostCss >>= makeItem
 
 runPostCss :: FilePath -> IO String
-runPostCss file = do
-    (exitCode, stdout, stderr) <- readProcessWithExitCode "./node_modules/.bin/postcss" [ file ] ""
-    if exitCode == ExitSuccess then return stdout else error stderr
+runPostCss file = runCommand "./node_modules/.bin/postcss" [ file ]
+
+-- Contexts
+--------------------------------------------------------------------------------
+gitContext :: Context String
+gitContext = field "git-hash"   (const $ unsafeCompiler $ getGitInformation Hash)
+          <> field "git-commit" (const $ unsafeCompiler $ getGitInformation Commit)
+
+baseContext :: Context String
+baseContext = gitContext <> defaultContext
+
+postContext :: Context String
+postContext = dateField "date" "%B %e, %Y" <> baseContext
 
 
 -- Main generator
@@ -59,7 +70,7 @@ main = hakyllWith config $ do
         route cleanRoute
         compile
             $   pandocCompiler
-            >>= loadAndApplyTemplate "templates/default.html" defaultContext
+            >>= loadAndApplyTemplate "templates/default.html" baseContext
             >>= relativizeUrls
             >>= cleanIndexUrls
 
@@ -74,8 +85,8 @@ main = hakyllWith config $ do
     match "posts/*" $ do
         route $ setExtension "html"
         compile $ pandocCompiler
-            >>= loadAndApplyTemplate "templates/post.html"    postCtx
-            >>= loadAndApplyTemplate "templates/default.html" postCtx
+            >>= loadAndApplyTemplate "templates/post.html"    postContext
+            >>= loadAndApplyTemplate "templates/default.html" postContext
             >>= relativizeUrls
 
     create ["archive.html"] $ do
@@ -83,9 +94,9 @@ main = hakyllWith config $ do
         compile $ do
             posts <- recentFirst =<< loadAll "posts/*"
             let archiveCtx =
-                    listField "posts" postCtx (return posts) `mappend`
+                    listField "posts" postContext (return posts) `mappend`
                     constField "title" "Archives"            `mappend`
-                    defaultContext
+                    baseContext
 
             makeItem ""
                 >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
@@ -98,8 +109,8 @@ main = hakyllWith config $ do
         compile $ do
             posts <- recentFirst =<< loadAll "posts/*"
             let indexCtx =
-                    listField "posts" postCtx (return posts) `mappend`
-                    defaultContext
+                    listField "posts" postContext (return posts) `mappend`
+                    baseContext
 
             getResourceBody
                 >>= applyAsTemplate indexCtx
@@ -112,9 +123,6 @@ main = hakyllWith config $ do
 
 -- Utils
 --------------------------------------------------------------------------------
-postCtx :: Context String
-postCtx = dateField "date" "%B %e, %Y" <> defaultContext
-
 matchEach :: [Pattern] -> Rules () -> Rules ()
 matchEach patterns = forM_ staticAssets . flip match
 
@@ -133,3 +141,19 @@ removeSuffix suffix str = if suffix `isSuffixOf` str
                              then take (length str - length suffix) str
                              else str
 
+runCommand :: FilePath -> [String] -> IO String
+runCommand cmd args = do
+    (exitCode, stdout, stderr) <- readProcessWithExitCode cmd args ""
+    if exitCode == ExitSuccess then return stdout else error stderr
+
+data GitInformation = Hash | Commit
+
+getFormat :: GitInformation -> String
+getFormat Hash = "%h"
+getFormat Commit = "%s"
+
+getGitInformation :: GitInformation -> IO String
+getGitInformation x = rtrim <$> runCommand "git" [ "log", "-1", "--format=" ++ getFormat x ]
+
+rtrim :: String -> String
+rtrim = dropWhileEnd isSpace
