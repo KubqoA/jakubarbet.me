@@ -34,9 +34,6 @@ staticAssets = [ "manifest.json"
 pages :: [Identifier]
 pages = [ "about.md" ]
 
-wordsPerMinute :: Int
-wordsPerMinute = 200
-
 -- Compilers
 --------------------------------------------------------------------------------
 postCssCompiler :: Compiler (Item String)
@@ -53,6 +50,7 @@ gitField information = field ("git" ++ show information) $ const $ unsafeCompile
 
 estimatedReadingTimeField :: Context String
 estimatedReadingTimeField = field "estimatedReadingTime" $ return . show . (`roundDiv` wordsPerMinute) . length . words . itemBody
+    where wordsPerMinute = 200
 
 -- Contexts
 --------------------------------------------------------------------------------
@@ -66,17 +64,21 @@ postContext = dateField "date" "%B %e, %Y"
            <> estimatedReadingTimeField
            <> baseContext
 
-indexContext :: Context String
-indexContext = listField "posts" postContext (recentFirst =<< loadAll "posts/*")
-            <> baseContext
+postsList :: Context String
+postsList = listField "posts" postContext (recentFirst =<< loadAll "posts/*")
 
-blogContext :: Context String
-blogContext = listField "posts" postContext (recentFirst =<< loadAll "posts/*") 
-           <> constField "title" "Blog"
-           <> baseContext
+indexes :: [(Pattern, Context String)]
+indexes = [ ("index.html",
+             postsList <> baseContext
+            )
+          , ("blog.html",
+             postsList <> titleField "Blog" <> baseContext
+            )
+          , ("projects.html",
+             titleField "Projects" <> baseContext
+            )
+          ]
 
-projectsContext :: Context String
-projectsContext = constField "title" "Projects" <> baseContext
 
 -- Main generator
 --------------------------------------------------------------------------------
@@ -105,27 +107,11 @@ main = hakyllWith config $ do
             >>= relativizeUrls
             >>= cleanIndexUrls
 
-    match "blog.html" $ do
+    forM_ indexes $ \(idx, context) -> match idx $ do
         route cleanRoute
         compile $ getResourceBody
-            >>= applyAsTemplate blogContext
-            >>= loadAndApplyTemplate "templates/default.html" blogContext
-            >>= relativizeUrls
-            >>= cleanIndexUrls
-
-    match "projects.html" $ do
-        route cleanRoute
-        compile $ getResourceBody
-            >>= applyAsTemplate projectsContext
-            >>= loadAndApplyTemplate "templates/default.html" projectsContext
-            >>= relativizeUrls
-            >>= cleanIndexUrls
-
-    match "index.html" $ do
-        route idRoute
-        compile $ getResourceBody
-            >>= applyAsTemplate indexContext
-            >>= loadAndApplyTemplate "templates/default.html" indexContext
+            >>= applyAsTemplate context
+            >>= loadAndApplyTemplate "templates/default.html" context
             >>= relativizeUrls
             >>= cleanIndexUrls
 
@@ -142,7 +128,9 @@ cleanRoute :: Routes
 cleanRoute = customRoute $ wrapFolder . toFilePath
   where
     wrapFolder :: FilePath -> FilePath
-    wrapFolder path = takeDirectory path </> takeBaseName path </> "index.html"
+    wrapFolder path = takeDirectory path </> wrapper </> "index.html"
+      -- Don't create index/index.html
+      where wrapper = let baseName = takeBaseName path in if baseName == "index" then "." else baseName
 
 cleanIndexUrls :: Item String -> Compiler (Item String)
 cleanIndexUrls = return . fmap (withUrls $ removeSuffix "index.html")
