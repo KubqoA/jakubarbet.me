@@ -32,12 +32,13 @@ config =
     }
 
 feedConfig :: FeedConfiguration
-feedConfig = FeedConfiguration
-    { feedTitle = "Jakub Arbet"
-    , feedDescription = "Blog posts from my personal site"
-    , feedAuthorName = "Jakub Arbet"
-    , feedAuthorEmail = "hi@jakubarbet.me"
-    , feedRoot = root
+feedConfig =
+  FeedConfiguration
+    { feedTitle = "Jakub Arbet",
+      feedDescription = "Blog posts from my personal site",
+      feedAuthorName = "Jakub Arbet",
+      feedAuthorEmail = "hi@jakubarbet.me",
+      feedRoot = root
     }
 
 postsPath :: Pattern
@@ -75,12 +76,20 @@ estimatedReadingTimeField = field "estimatedReadingTime" $ return . show . (`rou
   where
     wordsPerMinute = 200
 
+-- Adapted from hakyll's urlField
+prettyUrlField :: Context String
+prettyUrlField =
+  field "prettyUrl" $
+    fmap (removeSuffix "/index.html" . maybe "" toUrl) . getRoute . itemIdentifier
+
 -- Contexts
 --------------------------------------------------------------------------------
 baseContext :: Context String
 baseContext =
   gitField Hash
     <> gitField Commit
+    <> constField "root" root
+    <> prettyUrlField
     <> defaultContext
 
 postContext :: Context String
@@ -92,7 +101,7 @@ postContext =
 postList :: Context String
 postList = listField "posts" postContext (recentFirst =<< loadAll postsPath)
 
-indexes :: [(Pattern, Context String)]
+indexes :: [(Identifier, Context String)]
 indexes =
   [ ( "index.html",
       postList <> baseContext
@@ -138,7 +147,7 @@ main = hakyllWith config $ do
         >>= relativizeUrls
         >>= cleanIndexUrls
 
-  forM_ indexes $ \(idx, context) -> match idx $ do
+  forM_ indexes $ \(idx, context) -> create [idx] $ do
     route cleanRoute
     compile $
       getResourceBody
@@ -148,12 +157,26 @@ main = hakyllWith config $ do
         >>= cleanIndexUrls
 
   create ["rss.xml"] $ do
-      route idRoute
-      compile $ feedCompiler renderRss
+    route idRoute
+    compile $ feedCompiler renderRss
 
   create ["atom.xml"] $ do
-      route idRoute
-      compile $ feedCompiler renderAtom
+    route idRoute
+    compile $ feedCompiler renderAtom
+
+  create ["sitemap.xml"] $ do
+    route idRoute
+    compile $ do
+      let indexPages = filter (/= "index.html") $ map fst indexes
+
+      posts <- recentFirst =<< loadAll postsPath
+      singlePages <- loadAll (fromList $ indexPages ++ pages)
+
+      let pages = posts <> singlePages
+          siteMapContext = listField "pages" postContext (return pages) <> baseContext
+
+      makeItem ""
+        >>= loadAndApplyTemplate "templates/sitemap.xml" siteMapContext
 
   match "templates/*" $ compile templateBodyCompiler
 
@@ -167,13 +190,13 @@ cleanRoute :: Routes
 cleanRoute = customRoute $ wrapFolder . toFilePath
   where
     wrapFolder :: FilePath -> FilePath
-    wrapFolder path = takeDirectory path </> wrapper </> "index.html"
+    wrapFolder path = wrapper "index.html"
       where
         -- Don't create index/index.html
-        wrapper = let baseName = takeBaseName path in if baseName == "index" then "." else baseName
+        wrapper = let baseName = takeBaseName path in if baseName == "index" then id else (baseName </>)
 
 cleanIndexUrls :: Item String -> Compiler (Item String)
-cleanIndexUrls = return . fmap (withUrls $ removeSuffix "index.html")
+cleanIndexUrls = return . fmap (withUrls $ removeSuffix "/index.html")
 
 removeSuffix :: String -> String -> String
 removeSuffix suffix str =
