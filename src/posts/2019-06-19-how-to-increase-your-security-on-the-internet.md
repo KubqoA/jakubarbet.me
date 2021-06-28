@@ -1,7 +1,8 @@
 ---
-title: How to increase your security on the internet
 author: Jakub Arbet
 date: 2019-06-19
+title: How to increase your security on the internet
+description: Password security can be made easy
 metaTags: Security, Passwords
 ---
 

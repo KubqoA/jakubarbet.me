@@ -15,6 +15,10 @@ import System.Process (readProcessWithExitCode)
 
 -- Config
 --------------------------------------------------------------------------------
+domain, root :: String
+domain = "jakubarbet.me"
+root = "https://" ++ domain
+
 config :: Configuration
 config =
   defaultConfiguration
@@ -26,6 +30,18 @@ config =
       storeDirectory = "hakyll-gen/_cache",
       tmpDirectory = "hakyll-gen/_tmp"
     }
+
+feedConfig :: FeedConfiguration
+feedConfig = FeedConfiguration
+    { feedTitle = "Jakub Arbet"
+    , feedDescription = "Blog posts from my personal site"
+    , feedAuthorName = "Jakub Arbet"
+    , feedAuthorEmail = "hi@jakubarbet.me"
+    , feedRoot = root
+    }
+
+postsPath :: Pattern
+postsPath = "posts/*"
 
 staticAssets :: [Pattern]
 staticAssets =
@@ -41,9 +57,13 @@ pages = ["about.md"]
 --------------------------------------------------------------------------------
 postCssCompiler :: Compiler (Item String)
 postCssCompiler = getResourceFilePath >>= unsafeCompiler . runPostCss >>= makeItem
+  where
+    runPostCss file = runCommand "./node_modules/.bin/postcss" [file]
 
-runPostCss :: FilePath -> IO String
-runPostCss file = runCommand "./node_modules/.bin/postcss" [file]
+type FeedRender = FeedConfiguration -> Context String -> [Item String] -> Compiler (Item String)
+
+feedCompiler :: FeedRender -> Compiler (Item String)
+feedCompiler render = loadAllSnapshots postsPath "posts-content" >>= recentFirst >>= render feedConfig feedContext
 
 -- Fields
 --------------------------------------------------------------------------------
@@ -69,21 +89,24 @@ postContext =
     <> estimatedReadingTimeField
     <> baseContext
 
-postsList :: Context String
-postsList = listField "posts" postContext (recentFirst =<< loadAll "posts/*")
+postList :: Context String
+postList = listField "posts" postContext (recentFirst =<< loadAll postsPath)
 
 indexes :: [(Pattern, Context String)]
 indexes =
   [ ( "index.html",
-      postsList <> baseContext
+      postList <> baseContext
     ),
     ( "blog.html",
-      postsList <> titleField "Blog" <> baseContext
+      postList <> baseContext
     ),
     ( "projects.html",
-      titleField "Projects" <> baseContext
+      baseContext
     )
   ]
+
+feedContext :: Context String
+feedContext = baseContext
 
 -- Main generator
 --------------------------------------------------------------------------------
@@ -105,11 +128,12 @@ main = hakyllWith config $ do
         >>= relativizeUrls
         >>= cleanIndexUrls
 
-  match "posts/*" $ do
+  match postsPath $ do
     route cleanRoute
     compile $
       pandocCompiler
         >>= loadAndApplyTemplate "templates/post.html" postContext
+        >>= saveSnapshot "posts-content"
         >>= loadAndApplyTemplate "templates/default.html" postContext
         >>= relativizeUrls
         >>= cleanIndexUrls
@@ -122,6 +146,14 @@ main = hakyllWith config $ do
         >>= loadAndApplyTemplate "templates/default.html" context
         >>= relativizeUrls
         >>= cleanIndexUrls
+
+  create ["rss.xml"] $ do
+      route idRoute
+      compile $ feedCompiler renderRss
+
+  create ["atom.xml"] $ do
+      route idRoute
+      compile $ feedCompiler renderAtom
 
   match "templates/*" $ compile templateBodyCompiler
 
