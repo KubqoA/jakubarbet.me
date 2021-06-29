@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>Jakub Arbet</title>
+    <link href="https://jakubarbet.me/atom.xml" rel="self" />
+    <link href="https://jakubarbet.me" />
+    <id>https://jakubarbet.me/atom.xml</id>
+    <author>
+        <name>Jakub Arbet</name>
+        <email>hi@jakubarbet.me</email>
+    </author>
+    <updated>2019-06-19T00:00:00Z</updated>
+    <entry>
+    <title>How to increase your security on the internet</title>
+    <link href="https://jakubarbet.me/2019-06-19-how-to-increase-your-security-on-the-internet/index.html" />
+    <id>https://jakubarbet.me/2019-06-19-how-to-increase-your-security-on-the-internet/index.html</id>
+    <published>2019-06-19T00:00:00Z</published>
+    <updated>2019-06-19T00:00:00Z</updated>
+    <summary type="html"><![CDATA[Password security can be made easy]]></summary>
+</entry>
+
+</feed>
