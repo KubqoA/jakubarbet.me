@@ -1,16 +1,14 @@
 ---
-
+import BaseLayout from "../layouts/BaseLayout.astro"
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Jakub Arbet</title>
-	</head>
-	<body>
-		<h1 class="text-3xl">Jakub Arbet</h1>
-	</body>
-</html>
+<BaseLayout>
+	<p class="font-sans text-lg md:text-xl text-gray-800 leading-8 md:leading-8 mb-4 md:mb-2">
+		Hi, I'm 23, currently working as Software Engineer at <a href="https://vacuumlabs.com/" class="text-transparent bg-clip-text bg-gradient-to-r from-pink-700 to-pink-500">Vacuumlabs</a> and studying Computer Science.<br/>
+	</p>
+	<p class="font-sans text-lg md:text-xl text-gray-800 leading-8">
+		I also love <a href="/photography" class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">photography</a>,
+		creating <a href="https://soundcloud.com/jakub-arbet" class="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-amber-500">music</a>,
+		and occassionally <a href="/writing" class="text-transparent bg-clip-text bg-gradient-to-r from-sky-600 to-sky-500">writing</a> about things I find interesting.
+	</p>
+</BaseLayout>
