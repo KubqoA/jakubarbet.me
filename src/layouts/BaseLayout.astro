@@ -3,33 +3,74 @@ const { title, hideTitle = false, back, fullWidth = false } = Astro.props;
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik&family=Space+Mono&display=swap" rel="stylesheet">
-		<title>{title ? `${title} | Jakub Arbet` : "Jakub Arbet"}</title>
-	</head>
-	<body class="w-full">
-		<div class="container mx-auto px-8 md:px-16">
-			<div class={!fullWidth && 'max-w-[1000px]'}>
-				<header class="mt-16 md:mt-32 lg:mt-64 mb-12 flex flex-row justify-between items-center">
-					{!hideTitle && <h1 class="font-monospace text-2xl md:text-4xl text-gray-950">{title || "Jakub Arbet"}</h1>}
-					{back && <a href={back} class="text-gray-600 font-monospace text-xl lowercase hover:text-gray-950">&leftarrow; Back</a>}
-				</header>
-				<main>
-					<slot />
-				</main>
-				<footer class="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-5 mt-24">
-					<a href="https://www.linkedin.com/in/jakub-arbet/" class="block font-monospace text-gray-600 lowercase">LinkedIn</a>
-					<a href="/cv" class="block font-monospace text-gray-600 lowercase">CV</a>
-					<a href="https://github.com/KubqoA" class="block font-monospace text-gray-600 lowercase">GitHub</a>
-					<a href="mailto:hi@jakubarbet.me?subject=Hi%20Jakub!" class="block font-monospace text-gray-600 lowercase">hi(at)jakubarbet.me</a>
-					<a href="/gpg" class="block font-monospace text-gray-600 lowercase">GPG Public Key</a>
-				</footer>
-			</div>
-		</div>
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik&family=Space+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title ? `${title} | Jakub Arbet` : "Jakub Arbet"}</title>
+  </head>
+  <body class="w-full">
+    <div class="container mx-auto px-6 sm:px-8 md:px-16">
+      <div class={!fullWidth && "max-w-[1000px]"}>
+        <header class="mb-8 mt-10 md:mb-12 md:mt-16 xl:mt-32 2xl:mt-40">
+          <h1
+            class={`font-monospace text-2xl md:text-4xl ${title ? "text-gray-600 mb-1 md:mb-3" : "text-gray-950 pb-9 md:pb-11"}`}
+          >
+            Jakub Arbet
+          </h1>
+          {
+            (title || back) && (
+              <div class="flex h-8 flex-row items-center justify-between">
+                {title && (
+                  <h1 class="font-monospace text-2xl text-gray-950 md:text-4xl">
+                    {title}
+                  </h1>
+                )}
+                {back && (
+                  <a
+                    href={back}
+                    class="font-monospace text-xl lowercase text-gray-600 hover:text-gray-950"
+                  >
+                    &leftarrow; Back
+                  </a>
+                )}
+              </div>
+            )
+          }
+        </header>
+        <main>
+          <slot />
+        </main>
+        <footer
+          class="mt-24 flex flex-col space-y-3 pb-16 md:flex-row md:space-x-5 md:space-y-0"
+        >
+          <a
+            href="https://www.linkedin.com/in/jakub-arbet/"
+            class="block font-monospace lowercase text-gray-600">LinkedIn</a
+          >
+          <a href="/cv" class="block font-monospace lowercase text-gray-600"
+            >CV</a
+          >
+          <a
+            href="https://github.com/KubqoA"
+            class="block font-monospace lowercase text-gray-600">GitHub</a
+          >
+          <a
+            href="mailto:hi@jakubarbet.me?subject=Hi%20Jakub!"
+            class="block font-monospace lowercase text-gray-600"
+            >hi(at)jakubarbet.me</a
+          >
+          <a href="/gpg" class="block font-monospace lowercase text-gray-600"
+            >GPG Public Key</a
+          >
+        </footer>
+      </div>
+    </div>
+  </body>
 </html>

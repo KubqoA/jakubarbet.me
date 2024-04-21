@@ -70,6 +70,7 @@ const mapPhoto = (galleryName: string) => async (photo: FileDirent) => {
     placeholder: css,
     width: metadata.width,
     height: metadata.height,
+    horizontal: metadata.width > metadata.height,
     src,
     name: photo.file_name,
   };
@@ -106,15 +107,19 @@ const galleries = await Promise.all(galleryDirents.map(fetchGallery));
   {
     galleries.map((gallery) => (
       <div class="mb-8 md:mb-16">
-        <h2 class="mb-4 font-sans text-2xl text-gray-950">{gallery.name}</h2>
+        <h2 class="mb-4 font-sans text-xl text-gray-950 md:text-2xl">
+          {gallery.name}
+        </h2>
         {gallery.meta && (
-          <p class="-mt-2 mb-4 font-sans text-xl text-gray-800">
+          <p class="-mt-2 mb-4 max-w-prose font-sans text-lg text-gray-800 md:text-xl">
             {gallery.meta}
           </p>
         )}
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div class="grid grid-flow-row-dense grid-cols-1 items-center gap-y-4 md:grid-cols-2 md:gap-4 lg:grid-cols-3 xl:grid-cols-4">
           {gallery.photos.map((photo) => (
-            <div class="relative h-min overflow-hidden">
+            <div
+              class={`relative h-min overflow-hidden rounded-md ${photo.horizontal ? "col-span-2" : "cols-span-1"}`}
+            >
               <div
                 aria-hidden="true"
                 style={photo.placeholder}
@@ -126,6 +131,7 @@ const galleries = await Promise.all(galleryDirents.map(fetchGallery));
                 width={photo.width}
                 height={photo.height}
                 widths={[300, 600, 900, photo.width]}
+                class="w-full"
               />
             </div>
           ))}
