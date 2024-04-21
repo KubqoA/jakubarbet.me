@@ -28,9 +28,9 @@ const { title, hideTitle = false, back, fullWidth = false } = Astro.props;
             (title || back) && (
               <div class="flex h-8 flex-row items-center justify-between">
                 {title && (
-                  <h1 class="font-monospace text-2xl text-gray-950 md:text-4xl">
+                  <h2 class="font-monospace text-2xl text-gray-950 md:text-4xl">
                     {title}
-                  </h1>
+                  </h2>
                 )}
                 {back && (
                   <a
@@ -48,7 +48,7 @@ const { title, hideTitle = false, back, fullWidth = false } = Astro.props;
           <slot />
         </main>
         <footer
-          class="mt-24 flex flex-col space-y-3 pb-16 md:flex-row md:space-x-5 md:space-y-0"
+          class="mt-16 flex flex-col space-y-3 pb-16 md:flex-row md:space-x-5 md:space-y-0 2xl:pb-32"
         >
           <a
             href="https://www.linkedin.com/in/jakub-arbet/"

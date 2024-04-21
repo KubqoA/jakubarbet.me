@@ -1,0 +1,60 @@
+---
+import { Image } from "astro:assets";
+
+const {
+  slot,
+  company,
+  logo,
+  positions = [],
+  skills = [],
+  current = false,
+} = Astro.props;
+---
+
+<div>
+  <div class="mb-1 flex flex-row items-center space-x-2">
+    <Image src={logo} alt={`${company} logo`} class="h-6 w-6" />
+    <h4 class="font-sans text-xl md:text-2xl">{company}</h4>
+  </div>
+  {
+    positions.length > 0 && (
+      <div class="flex flex-col space-y-1">
+        {positions.map((position: string, idx) => (
+          <div class="relative flex flex-row items-center font-monospace text-sm uppercase md:text-lg">
+            {idx == 0 && current ? (
+              <div class="mr-3 h-2 w-2 shrink-0 rounded-full border-[1.5px] border-white bg-blue-500 outline outline-2 outline-blue-500" />
+            ) : (
+              <div
+                class={`mr-3 h-2 w-2 shrink-0 rounded-full ${idx == 0 ? "bg-blue-500" : "bg-blue-100"}`}
+              />
+            )}
+            <p class="text-nowrap  text-blue-700">
+              {position.split(", ")[0]}, <wbr />
+              {position.split(", ")[1]}
+            </p>
+            {positions.length > 0 && idx < positions.length - 1 && (
+              <div class="absolute left-[3px] top-1/2 -z-10 h-2/3 w-[2px] bg-blue-100" />
+            )}
+            {idx > 0 && (
+              <div class="absolute bottom-1/2 left-[3px] -z-10 h-2/3 w-[2px] bg-blue-100" />
+            )}
+          </div>
+        ))}
+      </div>
+    )
+  }
+  <p class="mt-2 text-pretty font-sans text-base leading-6 md:text-lg">
+    <slot />
+  </p>
+  {
+    skills && skills.length > 0 && (
+      <div class="mt-2 flex flex-row flex-wrap">
+        {skills.map((skill: string) => (
+          <span class="font-mono mb-2 mr-2 rounded-md bg-blue-50 px-3 py-1 text-sm text-blue-600 md:text-base">
+            {skill}
+          </span>
+        ))}
+      </div>
+    )
+  }
+</div>

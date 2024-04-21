@@ -1,0 +1,21 @@
+---
+const { level, skill } = Astro.props;
+---
+
+<div class="flex flex-row items-center space-x-2 sm:space-x-4">
+  <div class="flex flex-row items-center space-x-1 sm:space-x-2">
+    {
+      Array.from({ length: level }, (_, i) => (
+        <div class="h-2 w-2 bg-blue-600 sm:h-3 sm:w-3" />
+      ))
+    }
+    {
+      Array.from({ length: 5 - level }, (_, i) => (
+        <div class="h-2 w-2 bg-blue-100 sm:h-3 sm:w-3" />
+      ))
+    }
+  </div>
+  <span class="text-md font-sans text-gray-800 sm:text-lg lg:text-xl">
+    {skill}
+  </span>
+</div>
