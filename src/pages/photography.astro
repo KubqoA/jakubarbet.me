@@ -132,7 +132,6 @@ const galleries = await Promise.all(galleryDirents.map(fetchGallery));
                 alt={photo.name}
                 width={photo.width}
                 height={photo.height}
-                widths={[300, 600, 900, photo.width]}
                 class="w-full"
               />
             </div>
