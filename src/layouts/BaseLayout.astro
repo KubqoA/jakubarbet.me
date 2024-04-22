@@ -47,28 +47,48 @@ const { title, hideTitle = false, back, fullWidth = false } = Astro.props;
         <main>
           <slot />
         </main>
-        <footer
-          class="mt-16 flex flex-col space-y-3 pb-16 md:flex-row md:space-x-5 md:space-y-0 2xl:pb-32"
-        >
-          <a
-            href="https://www.linkedin.com/in/jakub-arbet/"
-            class="block font-monospace lowercase text-gray-600">LinkedIn</a
+        <footer class="mt-16 pb-16 2xl:pb-32">
+          <div
+            class="mb-6 flex flex-col space-y-3 md:flex-row md:space-x-5 md:space-y-0"
           >
-          <a href="/cv" class="block font-monospace lowercase text-gray-600"
-            >CV</a
-          >
-          <a
-            href="https://github.com/KubqoA"
-            class="block font-monospace lowercase text-gray-600">GitHub</a
-          >
-          <a
-            href="mailto:hi@jakubarbet.me?subject=Hi%20Jakub!"
-            class="block font-monospace lowercase text-gray-600"
-            >hi(at)jakubarbet.me</a
-          >
-          <a href="/gpg" class="block font-monospace lowercase text-gray-600"
-            >GPG Public Key</a
-          >
+            <a
+              href="https://www.linkedin.com/in/jakub-arbet/"
+              class="block font-monospace lowercase text-gray-600">LinkedIn</a
+            >
+            <a href="/cv" class="block font-monospace lowercase text-gray-600"
+              >CV</a
+            >
+            <a
+              href="https://github.com/KubqoA"
+              class="block font-monospace lowercase text-gray-600">GitHub</a
+            >
+            <a
+              href="mailto:hi@jakubarbet.me?subject=Hi%20Jakub!"
+              class="block font-monospace lowercase text-gray-600"
+              >hi(at)jakubarbet.me</a
+            >
+            <a href="/gpg" class="block font-monospace lowercase text-gray-600"
+              >GPG Public Key</a
+            >
+          </div>
+          <p class="font-sans text-xs text-gray-400">
+            This content for this site is licensed under <a
+              href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1"
+              target="_blank"
+              rel="license noopener noreferrer"
+              class="underline"
+            >
+              CC BY-SA 4.0</a
+            >. The <a
+              href="https://git.jakubarbet.me/~jakub/jakubarbet.me"
+              class="underline">code for this site</a
+            > is <a
+              href="https://opensource.org/licenses/MIT"
+              target="_blank"
+              rel="license noopener noreferrer"
+              class="underline">MIT</a
+            >.
+          </p>
         </footer>
       </div>
     </div>
