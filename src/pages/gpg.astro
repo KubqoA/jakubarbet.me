@@ -1,12 +1,13 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro"
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout title="GPG Public Key" hideTitle back="/" fullWidth>
-	<div class="width-full bg-slate-100 border-slate-300 border-2 rounded-md py-8 md:py-16 px-4 md:px-8">
-    <pre class="w-fit max-w-full mx-auto overflow-x-auto">
-      <code class="font-monospace">
------BEGIN PGP PUBLIC KEY BLOCK-----
+<BaseLayout title="GPG" back="/" fullWidth>
+  <div
+    class="-mx-6 w-screen border-y-2 border-slate-300 bg-slate-100 px-6 py-8 sm:mx-0 sm:w-full sm:rounded-md sm:border-2 md:py-8"
+  >
+    <pre
+      class="mx-auto w-fit max-w-full overflow-x-auto"><code class="font-monospace">-----BEGIN PGP PUBLIC KEY BLOCK-----
 
 mDMEX5rx4xYJKwYBBAHaRw8BAQdAbsjgWNoGd9g5hrljv4hZFYTt8MreEdTPtOKB
 yvtMI6+0Hkpha3ViIEFyYmV0IDxoaUBqYWt1YmFyYmV0Lm1lPoiQBBMWCAA4FiEE
@@ -28,8 +29,6 @@ CAeIfgQYFggAJhYhBJkNRqT45KiVrKFNbYg+SF29FnOMBQJfmvK4AhsMBQkDwmcA
 AAoJEIg+SF29FnOMa6ABALf4ZIv4wzds3m56mCtGICQ0fSGAt3h3q0E9cQ9va1s7
 AQCgWCXBJr/jozGvLQB69C2jdO1x+L7UnJGeowFV+009Bw==
 =/tJR
------END PGP PUBLIC KEY BLOCK-----
-      </code>
-    </pre>
+-----END PGP PUBLIC KEY BLOCK-----</code></pre>
   </div>
 </BaseLayout>
