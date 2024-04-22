@@ -4,6 +4,8 @@ import { Image } from "astro:assets";
 import { getPlaiceholder } from "plaiceholder";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { createHash } from "crypto";
+import { Markdown } from "@astropub/md";
+import Prose from "../components/Prose.astro";
 
 fs.mkdirSync("./.cache", { recursive: true });
 
@@ -111,14 +113,14 @@ const galleries = await Promise.all(galleryDirents.map(fetchGallery));
           {gallery.name}
         </h2>
         {gallery.meta && (
-          <p class="-mt-2 mb-4 max-w-prose font-sans text-lg text-gray-800 md:text-xl">
-            {gallery.meta}
-          </p>
+          <Prose class="-mt-2 mb-4 max-w-prose text-lg text-gray-800 md:text-xl">
+            <Markdown.Inline of={gallery.meta} />
+          </Prose>
         )}
         <div class="grid grid-flow-row-dense grid-cols-1 items-center gap-y-4 md:grid-cols-2 md:gap-4 lg:grid-cols-3 xl:grid-cols-4">
           {gallery.photos.map((photo) => (
             <div
-              class={`relative h-min overflow-hidden rounded-md ${photo.horizontal ? "col-span-2" : "cols-span-1"}`}
+              class={`relative h-min overflow-hidden rounded-md ${photo.horizontal ? "md:col-span-2" : ""}`}
             >
               <div
                 aria-hidden="true"

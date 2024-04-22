@@ -10,7 +10,10 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/markdown-remark": "^4",
     "@astrojs/tailwind": "^5.1.0",
+    "@astropub/md": "^0.4.0",
+    "@tailwindcss/typography": "^0.5.12",
     "astro": "^4.6.3",
     "plaiceholder": "^3.0.0",
     "sharp": "^0.33.3",
