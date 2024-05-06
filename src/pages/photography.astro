@@ -32,7 +32,7 @@ type Dirent = FolderDirent | FileDirent
 
 const fetchDirents = (path = '/') =>
   fetch(
-    `${baseUrl}/api/v2.1/share-links/${shareDir}/dirents/?thumbnail_size=48&path=${encodeURIComponent(path)}`,
+    `${baseUrl}/api/v2.1/share-links/${shareDir}/dirents/?thumbnail_size=48&path=${encodeURIComponent(path)}`
   )
     .then((response) => response.json())
     .then((data) => data.dirent_list as Dirent[])
@@ -40,7 +40,7 @@ const fetchDirents = (path = '/') =>
 const galleryDirents = await fetchDirents().then((dirents) =>
   dirents
     .filter((dirent): dirent is FolderDirent => dirent.is_dir)
-    .sort((a, b) => new Date(b.last_modified).getTime() - new Date(a.last_modified).getTime()),
+    .sort((a, b) => new Date(b.last_modified).getTime() - new Date(a.last_modified).getTime())
 )
 
 const mapPhoto = (galleryName: string) => async (photo: FileDirent) => {
@@ -75,14 +75,14 @@ const mapPhoto = (galleryName: string) => async (photo: FileDirent) => {
 
 const fetchGallery = async (galleryDirent: FolderDirent) => {
   const photos = await fetchDirents(galleryDirent.folder_path).then((dirents) =>
-    dirents.filter((dirent): dirent is FileDirent => !dirent.is_dir),
+    dirents.filter((dirent): dirent is FileDirent => !dirent.is_dir)
   )
   const metaIndex = photos.findIndex((photo) => photo.file_name === '_meta.md')
   const meta =
     metaIndex === -1
       ? null
       : await fetch(
-          `${baseUrl}/d/${shareDir}/files/?p=${encodeURIComponent(galleryDirent.folder_path + '_meta.md')}&dl=1`,
+          `${baseUrl}/d/${shareDir}/files/?p=${encodeURIComponent(galleryDirent.folder_path + '_meta.md')}&dl=1`
         ).then((response) => response.text())
 
   // Remove _meta.md from photos
@@ -102,7 +102,7 @@ const galleries = await Promise.all(galleryDirents.map(fetchGallery))
 
 <BaseLayout title="Photography" back="/" fullWidth>
   {
-    galleries.map((gallery) => (
+    galleries.map((gallery, index) => (
       <div class="mb-8 md:mb-16">
         <h2 class="mb-4 font-sans text-xl text-gray-950 md:text-2xl">{gallery.name}</h2>
         {gallery.meta && (
@@ -110,10 +110,16 @@ const galleries = await Promise.all(galleryDirents.map(fetchGallery))
             <Markdown.Inline of={gallery.meta} />
           </Prose>
         )}
-        <div class="grid grid-flow-row-dense grid-cols-1 items-center gap-y-4 md:grid-cols-2 md:gap-4 lg:grid-cols-3 xl:grid-cols-4">
+        <div
+          class="grid grid-flow-row-dense grid-cols-1 items-center gap-y-4 md:grid-cols-2 md:gap-4 lg:grid-cols-3 xl:grid-cols-4"
+          data-gallery
+        >
           {gallery.photos.map((photo) => (
-            <div
-              class={`relative h-min overflow-hidden rounded-md ${photo.horizontal ? 'md:col-span-2' : ''}`}
+            <a
+              href={photo.src}
+              data-pswp-width={photo.width}
+              data-pswp-height={photo.height}
+              class={`relative block h-min overflow-hidden rounded-md ${photo.horizontal ? 'md:col-span-2' : ''}`}
             >
               <div
                 aria-hidden="true"
@@ -127,10 +133,22 @@ const galleries = await Promise.all(galleryDirents.map(fetchGallery))
                 height={photo.height}
                 class="w-full"
               />
-            </div>
+            </a>
           ))}
         </div>
       </div>
     ))
   }
 </BaseLayout>
+
+<script>
+  import PhotoSwipeLightbox from 'photoswipe/lightbox'
+  import 'photoswipe/style.css'
+
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: '[data-gallery]',
+    children: 'a',
+    pswpModule: () => import('photoswipe'),
+  })
+  lightbox.init()
+</script>

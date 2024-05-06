@@ -1,18 +1,27 @@
 ---
-const {title, hideTitle = false, back, fullWidth = false} = Astro.props
+const {title, back, fullWidth = false} = Astro.props
 ---
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="Jakub Arbet's personal website" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+      rel="preload"
       href="https://fonts.googleapis.com/css2?family=Rubik&family=Space+Mono&display=swap"
-      rel="stylesheet"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Rubik&family=Space+Mono&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
     <title>{title ? `${title} | Jakub Arbet` : 'Jakub Arbet'}</title>
   </head>
   <body class="w-full">
@@ -63,7 +72,7 @@ const {title, hideTitle = false, back, fullWidth = false} = Astro.props
             >
             <a href="/gpg" class="block font-monospace lowercase text-gray-600">GPG Public Key</a>
           </div>
-          <p class="font-sans text-xs text-gray-400">
+          <p class="font-sans text-xs text-gray-500">
             The content for this site is licensed under <a
               href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1"
               target="_blank"
@@ -71,7 +80,7 @@ const {title, hideTitle = false, back, fullWidth = false} = Astro.props
               class="underline"
             >
               CC BY-SA 4.0</a
-            >. The <a href="https://git.jakubarbet.me/~jakub/jakubarbet.me" class="underline"
+            >. The <a href="https://github.com/KubqoA/jakubarbet.me" class="underline"
               >code for this site</a
             > is <a
               href="https://opensource.org/licenses/MIT"
