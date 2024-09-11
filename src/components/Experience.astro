@@ -5,7 +5,7 @@ const {company, logo, positions = [], skills = [], current = false} = Astro.prop
 ---
 
 <div>
-  <div class="mb-1 flex flex-row items-center space-x-2">
+  <div class="mb-1 flex flex-row items-center space-x-2 text-gray-900">
     <Image src={logo} alt={`${company} logo`} class="h-6 w-6" />
     <h4 class="font-sans text-xl md:text-2xl">{company}</h4>
   </div>

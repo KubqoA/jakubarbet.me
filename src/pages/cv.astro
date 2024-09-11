@@ -1,5 +1,5 @@
 ---
-import cardano from '../assets/cardano.svg'
+import betterstack from '../assets/betterstack.png'
 import gbas from '../assets/gbas.png'
 import gjgt from '../assets/gjgt.png'
 import microsoft from '../assets/microsoft.svg'
@@ -41,16 +41,23 @@ import Experience from '../components/Experience.astro'
       <Skill level={3} skill="Git" />
       <Skill level={2} skill="Haskell" />
       <Skill level={2} skill="C" />
-      <Skill level={2} skill="Clojure" />
+      <Skill level={2} skill="Rails" />
     </div>
   </section>
   <section class="mb-8 md:mb-12">
     <h3 class="mb-4 font-monospace text-2xl text-gray-950 md:text-3xl">Experience</h3>
     <div class="flex flex-col space-y-4">
       <Experience
+        company="Better Stack"
+        logo={betterstack}
+        positions={['Full Stack Engineer, August 2024 - Current']}
+        skills={['Ruby on Rails', 'Hotwire', 'Vue.js', 'PostgreSQL']}
+        current
+      />
+      <Experience
         company="Vacuumlabs"
         logo={vacuumlabs}
-        positions={['Senior Software Engineer, July 2022 - Current']}
+        positions={['Senior Software Engineer, July 2022 - June 2024']}
         skills={[
           'TypeScript',
           'Haskell',
@@ -61,7 +68,6 @@ import Experience from '../components/Experience.astro'
           'GraphQL',
           'React',
         ]}
-        current
       >
         I helped building one of the first decentralized exchanges on top of Cardano blockchain. My
         responsibility was the architecture of the off-chain components of the smart contracts, and
