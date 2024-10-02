@@ -10,7 +10,7 @@ import Prose from '../components/Prose.astro'
 fs.mkdirSync('./.cache', {recursive: true})
 
 const baseUrl = 'https://drive.jakubarbet.me' // Seafile base URL
-const shareDir = '4e62a6ce8249477faf33' // Public Photos share link ID
+const shareDir = 'f26af96f116b4d4cb72b' // Public Photos share link ID
 
 // Scans the share link directory for galleries
 // For each gallery, fetches the list of photos and the _meta.md file
@@ -32,7 +32,7 @@ type Dirent = FolderDirent | FileDirent
 
 const fetchDirents = (path = '/') =>
   fetch(
-    `${baseUrl}/api/v2.1/share-links/${shareDir}/dirents/?thumbnail_size=48&path=${encodeURIComponent(path)}`
+    `${baseUrl}/api/v2.1/share-links/${shareDir}/dirents/?thumbnail_size=48&path=${encodeURIComponent(path)}`,
   )
     .then((response) => response.json())
     .then((data) => data.dirent_list as Dirent[])
@@ -40,7 +40,7 @@ const fetchDirents = (path = '/') =>
 const galleryDirents = await fetchDirents().then((dirents) =>
   dirents
     .filter((dirent): dirent is FolderDirent => dirent.is_dir)
-    .sort((a, b) => new Date(b.last_modified).getTime() - new Date(a.last_modified).getTime())
+    .sort((a, b) => new Date(b.last_modified).getTime() - new Date(a.last_modified).getTime()),
 )
 
 const mapPhoto = (galleryName: string) => async (photo: FileDirent) => {
@@ -75,14 +75,14 @@ const mapPhoto = (galleryName: string) => async (photo: FileDirent) => {
 
 const fetchGallery = async (galleryDirent: FolderDirent) => {
   const photos = await fetchDirents(galleryDirent.folder_path).then((dirents) =>
-    dirents.filter((dirent): dirent is FileDirent => !dirent.is_dir)
+    dirents.filter((dirent): dirent is FileDirent => !dirent.is_dir),
   )
   const metaIndex = photos.findIndex((photo) => photo.file_name === '_meta.md')
   const meta =
     metaIndex === -1
       ? null
       : await fetch(
-          `${baseUrl}/d/${shareDir}/files/?p=${encodeURIComponent(galleryDirent.folder_path + '_meta.md')}&dl=1`
+          `${baseUrl}/d/${shareDir}/files/?p=${encodeURIComponent(galleryDirent.folder_path + '_meta.md')}&dl=1`,
         ).then((response) => response.text())
 
   // Remove _meta.md from photos
