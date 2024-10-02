@@ -11,141 +11,89 @@ import vacuumlabs from '../assets/vacuumlabs.svg'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import Skill from '../components/Skill.astro'
 import Experience from '../components/Experience.astro'
+
+const skills = {
+  'English C1': 5,
+  TypeScript: 5,
+  'Node.js': 4,
+  Cardano: 4,
+  Linux: 4,
+  Bash: 4,
+  'HTML/CSS': 4,
+  React: 3,
+  Nix: 3,
+  PostgreSQL: 3,
+  Python: 3,
+  Laravel: 3,
+  Git: 3,
+  Rails: 2,
+  Vue: 2,
+  C: 2,
+}
 ---
 
 <BaseLayout title="CV" back="/">
   <section class="mb-8 md:mb-12">
     <p class="font-sans text-lg leading-8 text-gray-800 md:text-xl md:leading-8">
-      I'm a full-stack developer experienced in building backends with TypeScript and Laravel,
-      frontends with React and Tailwind, dApps on Cardano, managing Linux servers, and low-level
+      I'm a full-stack developer experienced in building backends with TypeScript, Rails, and Laravel, frontends with React, Vue and Tailwind, dApps on Cardano, managing Linux servers, and low-level
       programming in C.
     </p>
   </section>
   <section class="mb-8 md:mb-12">
     <h3 class="mb-4 font-monospace text-2xl text-gray-950 md:text-3xl">Skills</h3>
-    <div
-      class="grid grid-flow-row grid-cols-2 gap-x-8 gap-y-4 md:grid-flow-col md:grid-rows-6 lg:grid-rows-4"
-    >
-      <Skill level={5} skill="English C1" />
-      <Skill level={5} skill="TypeScript" />
-      <Skill level={4} skill="Node.js" />
-      <Skill level={4} skill="Cardano" />
-      <Skill level={4} skill="Linux" />
-      <Skill level={4} skill="Bash" />
-      <Skill level={4} skill="HTML/CSS" />
-      <Skill level={3} skill="React" />
-      <Skill level={3} skill="Nix" />
-      <Skill level={3} skill="PostgreSQL" />
-      <Skill level={3} skill="Python" />
-      <Skill level={3} skill="Laravel" />
-      <Skill level={3} skill="Git" />
-      <Skill level={2} skill="Haskell" />
-      <Skill level={2} skill="C" />
-      <Skill level={2} skill="Rails" />
+    <div class="grid grid-flow-row grid-cols-2 gap-x-8 gap-y-4 md:grid-flow-col md:grid-rows-6 lg:grid-rows-4">
+      {Object.entries(skills).map(([skill, level]) => <Skill skill={skill} level={level} />)}
     </div>
   </section>
   <section class="mb-8 md:mb-12">
     <h3 class="mb-4 font-monospace text-2xl text-gray-950 md:text-3xl">Experience</h3>
     <div class="flex flex-col space-y-4">
-      <Experience
-        company="Better Stack"
-        logo={betterstack}
-        positions={['Full Stack Engineer, August 2024 - Current']}
-        skills={['Ruby on Rails', 'Hotwire', 'Vue.js', 'PostgreSQL']}
-        current
-      />
+      <Experience company="Better Stack" logo={betterstack} positions={['Full Stack Engineer, August 2024 - Current']} skills={['Ruby on Rails', 'Hotwire', 'Vue.js', 'PostgreSQL']} current />
       <Experience
         company="Vacuumlabs"
         logo={vacuumlabs}
         positions={['Senior Software Engineer, July 2022 - June 2024']}
-        skills={[
-          'TypeScript',
-          'Haskell',
-          'PostgreSQL',
-          'Prisma',
-          'AWS',
-          'Cardano',
-          'GraphQL',
-          'React',
-        ]}
+        skills={['TypeScript', 'Haskell', 'PostgreSQL', 'Prisma', 'AWS', 'Cardano', 'GraphQL', 'React']}
       >
-        I helped building one of the first decentralized exchanges on top of Cardano blockchain. My
-        responsibility was the architecture of the off-chain components of the smart contracts, and
+        I helped building one of the first decentralized exchanges on top of Cardano blockchain. My responsibility was the architecture of the off-chain components of the smart contracts, and
         providing domain knowledge to help make technological and business decisions.
       </Experience>
       <Experience
         company="Vacuumlabs"
         logo={vacuumlabs}
-        positions={[
-          'Mid Software Engineer, September 2021 - June 2022',
-          'Junior Software Engineer, December 2020 - August 2021',
-        ]}
+        positions={['Mid Software Engineer, September 2021 - June 2022', 'Junior Software Engineer, December 2020 - August 2021']}
         skills={['TypeScript', 'React', 'PostgreSQL', 'Heroku', 'C', 'Cardano']}
       >
-        Rychlotest Covid, covid testing with good UX, was the first product I worked on. I helped
-        modernize the UI, and I introduced granular permission system to the application. The second
-        project was Cardano application for the Ledger hardware wallet, written in embedded C. This
-        project helped me understand blockchains in general and the ins and outs of Cardano.
+        Rychlotest Covid, covid testing with good UX, was the first product I worked on. I helped modernize the UI, and I introduced granular permission system to the application. The second project
+        was Cardano application for the Ledger hardware wallet, written in embedded C. This project helped me understand blockchains in general and the ins and outs of Cardano.
       </Experience>
       <Experience
         company="Microsoft"
         logo={microsoft}
-        positions={[
-          'Learn Student Ambassador, June 2018 - January 2021',
-          'Learning Program, January 2017 - June 2018',
-        ]}
+        positions={['Learn Student Ambassador, June 2018 - January 2021', 'Learning Program, January 2017 - June 2018']}
         skills={['Laravel', 'Azure', 'Soft Skills']}
       >
-        I participated in a learning program for high school students called "Študentské trénerské
-        centrum", where I improved my presentation and soft skills. After graduating I got promoted
-        to the Learn Student Ambassador program. As part of the program I led several webinars for
-        teachers in Slovakia about Azure and security.
+        I participated in a learning program for high school students called "Študentské trénerské centrum", where I improved my presentation and soft skills. After graduating I got promoted to the
+        Learn Student Ambassador program. As part of the program I led several webinars for teachers in Slovakia about Azure and security.
       </Experience>
-      <Experience
-        company="GJGT"
-        logo={gjgt}
-        positions={['Full-Stack Developer, August 2019 - September 2019']}
-        skills={['Laravel', 'HTML/CSS']}
-      >
-        New webpage for a high school in Slovakia in a collaboration with a designer from Tochka.
-        It's powered by a custom CMS written in Laravel with frontend based on the provided design.
+      <Experience company="GJGT" logo={gjgt} positions={['Full-Stack Developer, August 2019 - September 2019']} skills={['Laravel', 'HTML/CSS']}>
+        New webpage for a high school in Slovakia in a collaboration with a designer from Tochka. It's powered by a custom CMS written in Laravel with frontend based on the provided design.
       </Experience>
-      <Experience
-        company="Revolware"
-        logo={revolware}
-        positions={['Developer and Server Admin, November 2017 - June 2020']}
-        skills={['Laravel', 'Bash', 'Linux']}
-      >
-        I worked mainly on Laravel backends for client and in-house applications. I also started the
-        company's Linux server used for self-hosted web, mail, file storage, and private Git hosting
-        for projects, with CI/CD baked in.
+      <Experience company="Revolware" logo={revolware} positions={['Developer and Server Admin, November 2017 - June 2020']} skills={['Laravel', 'Bash', 'Linux']}>
+        I worked mainly on Laravel backends for client and in-house applications. I also started the company's Linux server used for self-hosted web, mail, file storage, and private Git hosting for
+        projects, with CI/CD baked in.
       </Experience>
     </div>
   </section>
   <section>
     <h3 class="mb-4 font-monospace text-2xl text-gray-950 md:text-3xl">Education</h3>
     <div class="flex flex-col space-y-4">
-      <Experience
-        company="Masaryk University Faculty of Informatics"
-        logo={muni}
-        positions={["Bachelor's degree in Informatics, 2020 - Current"]}
-        current
-      >
-        In the second year of my studies I was a seminar tutor of introductory functional
-        programming course.
+      <Experience company="Masaryk University Faculty of Informatics" logo={muni} positions={["Bachelor's degree in Informatics, 2020 - Current"]} current>
+        In the second year of my studies I was a seminar tutor of introductory functional programming course.
       </Experience>
-      <Experience
-        company="University of Tartu Institute of Computer Science"
-        logo={ut}
-        positions={['Erasmus Exchange, 2022']}
-      />
-      <Experience
-        company="Milan Hodža Bilingual Grammar School"
-        logo={gbas}
-        positions={['High School, 2015 - 2020']}
-      >
-        Finished my studies with an A from English language state exam with a technical
-        specialization at C1 level.
+      <Experience company="University of Tartu Institute of Computer Science" logo={ut} positions={['Erasmus Exchange, 2022']} />
+      <Experience company="Milan Hodža Bilingual Grammar School" logo={gbas} positions={['High School, 2015 - 2020']}>
+        Finished my studies with an A from English language state exam with a technical specialization at C1 level.
       </Experience>
     </div>
   </section>
