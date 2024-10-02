@@ -1,56 +1,16 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import ExternalLink from '../components/ExternalLink.astro'
 ---
 
 <BaseLayout>
   <p class="mb-4 font-sans text-lg leading-8 text-gray-800 md:mb-2 md:text-xl md:leading-8">
-    Hi 👋, I'm 24, and currently working as Full Stack Engineer at <a
-      href="https//betterstack.com"
-      target=""
-      class="bg-gradient-to-r from-[#5B63D3] to-[#4449A9] bg-clip-text text-transparent"
-      >Better Stack <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 16 16"
-        fill="currentColor"
-        class="mb-[2px] inline size-4 text-[#4449A9]"
-      >
-        <path
-          d="M6.22 8.72a.75.75 0 0 0 1.06 1.06l5.22-5.22v1.69a.75.75 0 0 0 1.5 0v-3.5a.75.75 0 0 0-.75-.75h-3.5a.75.75 0 0 0 0 1.5h1.69L6.22 8.72Z"
-        ></path>
-        <path
-          d="M3.5 6.75c0-.69.56-1.25 1.25-1.25H7A.75.75 0 0 0 7 4H4.75A2.75 2.75 0 0 0 2 6.75v4.5A2.75 2.75 0 0 0 4.75 14h4.5A2.75 2.75 0 0 0 12 11.25V9a.75.75 0 0 0-1.5 0v2.25c0 .69-.56 1.25-1.25 1.25h-4.5c-.69 0-1.25-.56-1.25-1.25v-4.5Z"
-        ></path>
-      </svg></a
-    >.
+    Hi 👋, I'm 24, and currently working as Full Stack Engineer at
+    <ExternalLink href="https://betterstack.com" class="bg-gradient-to-r from-[#5B63D3] to-[#4449A9] bg-clip-text text-transparent" iconClass="text-[#4449A9]">Better Stack</ExternalLink>.
   </p>
   <p class="font-sans text-lg leading-8 text-gray-800 md:text-xl">
-    I also love
-    <a
-      href="/photography"
-      class="bg-gradient-to-r from-teal-600 to-emerald-600 bg-clip-text text-transparent"
-      >photography</a
-    >, creating <a
-      href="https://soundcloud.com/jakub-arbet"
-      target="_blank"
-      class="bg-gradient-to-r from-amber-500 to-amber-600 bg-clip-text text-transparent"
-    >
-      music
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 16 16"
-        fill="currentColor"
-        class="mb-[2px] inline size-4 text-amber-600"
-      >
-        <path
-          d="M6.22 8.72a.75.75 0 0 0 1.06 1.06l5.22-5.22v1.69a.75.75 0 0 0 1.5 0v-3.5a.75.75 0 0 0-.75-.75h-3.5a.75.75 0 0 0 0 1.5h1.69L6.22 8.72Z"
-        ></path>
-        <path
-          d="M3.5 6.75c0-.69.56-1.25 1.25-1.25H7A.75.75 0 0 0 7 4H4.75A2.75 2.75 0 0 0 2 6.75v4.5A2.75 2.75 0 0 0 4.75 14h4.5A2.75 2.75 0 0 0 12 11.25V9a.75.75 0 0 0-1.5 0v2.25c0 .69-.56 1.25-1.25 1.25h-4.5c-.69 0-1.25-.56-1.25-1.25v-4.5Z"
-        ></path>
-      </svg>
-    </a>, and occassionally <a
-      href="/writing"
-      class="bg-gradient-to-r from-pink-600 to-pink-500 bg-clip-text text-transparent">writing</a
-    > about things I find interesting.
+    I also love <a href="/photography" class="bg-gradient-to-r from-teal-600 to-emerald-600 bg-clip-text text-transparent">photography</a>,
+    creating <ExternalLink href="https://soundcloud.com/jakub-arbet" class="bg-gradient-to-r from-amber-500 to-amber-600 bg-clip-text text-transparent" iconClass="text-amber-600">music</ExternalLink>,
+    and occassionally <a href="/writing" class="bg-gradient-to-r from-pink-600 to-pink-500 bg-clip-text text-transparent">writing</a> about things I find interesting.
   </p>
 </BaseLayout>
