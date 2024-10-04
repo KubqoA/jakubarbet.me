@@ -2,8 +2,6 @@
 const {class: className = ''} = Astro.props
 ---
 
-<div
-  class={`font-sans prose dark:prose-invert prose-gray text-pretty prose-a:text-stone-700 ${className}`}
->
+<div class={`font-sans prose max-w-prose dark:prose-invert prose-gray text-pretty prose-a:text-stone-700 ${className}`}>
   <slot />
 </div>

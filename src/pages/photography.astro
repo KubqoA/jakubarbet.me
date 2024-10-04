@@ -1,154 +1,34 @@
 ---
-import fs from 'fs'
 import {Image} from 'astro:assets'
-import {getPlaiceholder} from 'plaiceholder'
-import BaseLayout from '../layouts/BaseLayout.astro'
-import {createHash} from 'crypto'
-import {Markdown} from '@astropub/md'
-import Prose from '../components/Prose.astro'
+import {getCollection} from 'astro:content'
+import BaseLayout from '~/layouts/BaseLayout.astro'
 
-fs.mkdirSync('./.cache', {recursive: true})
-
-const baseUrl = 'https://drive.jakubarbet.me' // Seafile base URL
-const shareDir = 'f26af96f116b4d4cb72b' // Public Photos share link ID
-
-// Scans the share link directory for galleries
-// For each gallery, fetches the list of photos and the _meta.md file
-
-type FolderDirent = {
-  is_dir: true
-  last_modified: string
-  folder_path: string
-  folder_name: string
-}
-type FileDirent = {
-  is_dir: false
-  last_modified: string
-  file_path: string
-  file_name: string
-}
-
-type Dirent = FolderDirent | FileDirent
-
-const fetchDirents = (path = '/') =>
-  fetch(
-    `${baseUrl}/api/v2.1/share-links/${shareDir}/dirents/?thumbnail_size=48&path=${encodeURIComponent(path)}`,
-  )
-    .then((response) => response.json())
-    .then((data) => data.dirent_list as Dirent[])
-
-const galleryDirents = await fetchDirents().then((dirents) =>
-  dirents
-    .filter((dirent): dirent is FolderDirent => dirent.is_dir)
-    .sort((a, b) => new Date(b.last_modified).getTime() - new Date(a.last_modified).getTime()),
-)
-
-const mapPhoto = (galleryName: string) => async (photo: FileDirent) => {
-  const src = `${baseUrl}/d/${shareDir}/files/?p=${encodeURIComponent(photo.file_path)}&raw=1`
-  const hash = createHash('sha256').update(src).digest('hex')
-  const isCached =
-    fs.existsSync(`./.cache/${hash}`) &&
-    fs.statSync(`./.cache/${hash}`).mtimeMs > new Date(photo.last_modified).getTime()
-
-  const buffer = isCached
-    ? fs.readFileSync(`./.cache/${hash}`)
-    : await fetch(src)
-        .then((res) => res.arrayBuffer())
-        .then(Buffer.from)
-
-  const {css, metadata} = await getPlaiceholder(buffer)
-
-  if (!isCached) {
-    console.log(`Caching ${galleryName}/${photo.file_name}`)
-    fs.writeFileSync(`./.cache/${hash}`, buffer)
-  }
-
-  return {
-    placeholder: css,
-    width: metadata.width,
-    height: metadata.height,
-    horizontal: metadata.width > metadata.height,
-    src,
-    name: photo.file_name,
-  }
-}
-
-const fetchGallery = async (galleryDirent: FolderDirent) => {
-  const photos = await fetchDirents(galleryDirent.folder_path).then((dirents) =>
-    dirents.filter((dirent): dirent is FileDirent => !dirent.is_dir),
-  )
-  const metaIndex = photos.findIndex((photo) => photo.file_name === '_meta.md')
-  const meta =
-    metaIndex === -1
-      ? null
-      : await fetch(
-          `${baseUrl}/d/${shareDir}/files/?p=${encodeURIComponent(galleryDirent.folder_path + '_meta.md')}&dl=1`,
-        ).then((response) => response.text())
-
-  // Remove _meta.md from photos
-  if (metaIndex !== -1) {
-    photos.splice(metaIndex, 1)
-  }
-
-  return {
-    name: galleryDirent.folder_name,
-    meta,
-    photos: await Promise.all(photos.map(mapPhoto(galleryDirent.folder_name))),
-  }
-}
-
-const galleries = await Promise.all(galleryDirents.map(fetchGallery))
+const galleries = await getCollection('albums').then((items) => items.sort((a, b) => b.data.date - a.data.date))
 ---
 
 <BaseLayout title="Photography" back="/" fullWidth>
-  {
-    galleries.map((gallery, index) => (
-      <div class="mb-8 md:mb-16">
-        <h2 class="mb-4 font-sans text-xl text-gray-950 md:text-2xl">{gallery.name}</h2>
-        {gallery.meta && (
-          <Prose class="-mt-2 mb-4 max-w-prose text-lg text-gray-800 md:text-xl">
-            <Markdown.Inline of={gallery.meta} />
-          </Prose>
-        )}
-        <div
-          class="grid grid-flow-row-dense grid-cols-1 items-center gap-y-4 md:grid-cols-2 md:gap-4 lg:grid-cols-3 xl:grid-cols-4"
-          data-gallery
-        >
-          {gallery.photos.map((photo) => (
-            <a
-              href={photo.src}
-              data-pswp-width={photo.width}
-              data-pswp-height={photo.height}
-              class={`relative block h-min overflow-hidden rounded-md ${photo.horizontal ? 'md:col-span-2' : ''}`}
-            >
-              <div
-                aria-hidden="true"
-                style={photo.placeholder}
-                class="absolute inset-0 z-[-1] h-full w-full scale-150 transform blur-2xl filter"
-              />
-              <Image
-                src={photo.src}
-                alt={photo.name}
-                width={photo.width}
-                height={photo.height}
-                class="w-full"
-              />
-            </a>
-          ))}
-        </div>
-      </div>
-    ))
-  }
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    {
+      galleries.map((item) => (
+        <a class="group relative inline-block overflow-hidden rounded-md" href={`/gallery/${item.slug}`}>
+          <div class="aspect-w-16 aspect-h-9 w-full">
+            <Image
+              src={item.data.cover}
+              alt={item.data.name}
+              format="avif"
+              quality="mid"
+              class="h-full w-full object-cover transition-all group-hover:scale-105"
+            />
+            <div class="absolute inset-0 bg-black opacity-30 transition-opacity group-hover:opacity-10" />
+          </div>
+          <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black to-transparent p-4">
+            <h2 class="font-sans text-xl text-white md:text-2xl">{item.data.name}</h2>
+            <p class="mb-2 text-sm uppercase text-gray-300">
+              {item.data.date.toLocaleString('en-us', {year: 'numeric', month: 'short'})}
+            </p>
+          </div>
+        </a>
+      ))
+    }
+  </div>
 </BaseLayout>
-
-<script>
-  import PhotoSwipeLightbox from 'photoswipe/lightbox'
-  import 'photoswipe/style.css'
-
-  const lightbox = new PhotoSwipeLightbox({
-    gallery: '[data-gallery]',
-    children: 'a',
-    pswpModule: () => import('photoswipe'),
-  })
-  lightbox.init()
-</script>
