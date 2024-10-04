@@ -34,13 +34,19 @@ const images = await getAlbumImages(gallery.slug)
           data-pswp-height={image.height}
           class={`relative block h-min overflow-hidden rounded-md ${image.width > image.height ? 'md:col-span-2' : ''}`}
         >
+          <div
+            aria-hidden="true"
+            style={image.placeholder}
+            class="absolute inset-0 z-[-1] h-full w-full scale-150 transform blur-2xl filter"
+          />
           <Image
             src={image}
             alt={`Image from ${gallery.data.name} album`}
             format="avif"
             quality={50}
+            breakpoints={[300]}
+            width={500}
             class="w-full"
-            loading="lazy"
           />
         </a>
       ))

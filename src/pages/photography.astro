@@ -2,21 +2,38 @@
 import {Image} from 'astro:assets'
 import {getCollection} from 'astro:content'
 import BaseLayout from '~/layouts/BaseLayout.astro'
+import {getPlaceholder} from '~/utils/albums'
 
-const galleries = await getCollection('albums').then((items) => items.sort((a, b) => b.data.date - a.data.date))
+// const galleries = await getCollection('albums').then((items) => items.sort((a, b) => b.data.date - a.data.date))
+const galleries = await getCollection('albums')
+const sortedGalleries = galleries.sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+const sortedGalleriesWithPlaceholder = await Promise.all(
+  sortedGalleries.map(async (item) => ({
+    ...item,
+    placeholder: await getPlaceholder(item.data.cover.fsPath),
+  })),
+)
 ---
 
 <BaseLayout title="Photography" back="/" fullWidth>
   <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
     {
-      galleries.map((item) => (
+      sortedGalleriesWithPlaceholder.map((item) => (
         <a class="group relative inline-block overflow-hidden rounded-md" href={`/gallery/${item.slug}`}>
-          <div class="aspect-w-16 aspect-h-9 w-full">
+          <div class="w-full">
+            <div
+              aria-hidden="true"
+              style={item.placeholder}
+              class="absolute inset-0 z-[-1] h-full w-full scale-150 transform blur-2xl filter"
+            />
             <Image
               src={item.data.cover}
               alt={item.data.name}
               format="avif"
-              quality="mid"
+              quality={50}
+              breakpoints={[300, 500]}
+              breakpoints={[300]}
+              width={500}
               class="h-full w-full object-cover transition-all group-hover:scale-105"
             />
             <div class="absolute inset-0 bg-black opacity-30 transition-opacity group-hover:opacity-10" />
