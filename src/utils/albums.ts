@@ -1,5 +1,7 @@
 import fs from 'node:fs/promises'
 import {getPlaiceholder} from 'plaiceholder'
+import {join, dirname} from 'path'
+import {fileURLToPath} from 'url'
 
 export const getPlaceholder = async (fsPath: string) => {
   const file = await fs.readFile(fsPath)
@@ -8,18 +10,28 @@ export const getPlaceholder = async (fsPath: string) => {
 }
 
 export async function getAlbumImages(albumSlug: string) {
-  let imagesGlob = import.meta.glob<{default: ImageMetadata}>('/src/content/albums/**/*.{jpeg,jpg}')
-  imagesGlob = Object.fromEntries(Object.entries(imagesGlob).filter(([key]) => key.includes(albumSlug)))
+  const imagesGlob = import.meta.glob<{default: ImageMetadata}>('/src/content/albums/**/*.{jpeg,jpg,png,webp}', {
+    eager: true,
+  })
 
-  // Images are promises, so we need to resolve the glob promises
-  const images = await Promise.all(Object.values(imagesGlob).map((image) => image().then((mod) => mod.default)))
+  const albumImages = Object.entries(imagesGlob).filter(([key]) => key.includes(albumSlug))
 
-  const imagesWithPlaceholders = await Promise.all(
-    images.map(async (image) => ({
-      ...image,
-      placeholder: getPlaceholder(image.src.slice(4).split('?')[0]),
-    })),
+  const images = await Promise.all(
+    albumImages.map(async ([key, imageModule]) => {
+      // Convert the URL-style path to a file system path
+      const __filename = fileURLToPath(import.meta.url)
+      const __dirname = dirname(__filename)
+
+      // Construct the path relative to the project root
+      const projectRoot = join(__dirname, '../..')
+      const fsPath = join(projectRoot, key)
+
+      const image = imageModule.default
+      const placeholder = await getPlaceholder(fsPath)
+
+      return {...image, placeholder}
+    }),
   )
 
-  return imagesWithPlaceholders
+  return images
 }
