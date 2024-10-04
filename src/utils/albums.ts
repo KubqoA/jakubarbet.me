@@ -29,7 +29,7 @@ export async function getAlbumImages(albumSlug: string) {
       const image = imageModule.default
       const placeholder = await getPlaceholder(fsPath)
 
-      return {...image, placeholder}
+      return {...image, placeholder, horizontal: image.width > image.height}
     }),
   )
 
