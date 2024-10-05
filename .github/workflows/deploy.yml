@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: ["main"]
+    branches: ['main']
   workflow_dispatch:
 
 jobs:
@@ -13,6 +13,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Cache Image optimization
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules/.astro
+          key: ${{ runner.os }}-astro-cache-${{ github.run_id }}
+          restore-keys: |
+            ${{ runner.os }}-astro-cache-
+
       - name: Install, build, and upload your site output
         uses: withastro/action@v2
 
@@ -20,15 +29,14 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
 
-    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
     permissions:
-      pages: write      # to deploy to Pages
-      id-token: write   # to verify the deployment originates from an appropriate source
-    
+      pages: write
+      id-token: write
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-      
+
     steps:
       - name: Deploy to GitHub Pages
         id: deployment

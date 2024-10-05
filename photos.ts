@@ -29,3 +29,5 @@ await Promise.all(
     return [metadata, ...photos].map((entry) => downloadFile(entry.file_path))
   }),
 )
+
+export {}

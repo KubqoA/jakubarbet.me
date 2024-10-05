@@ -9,12 +9,10 @@
     "astro": "astro"
   },
   "devDependencies": {
-    "@astrojs/markdown-remark": "^5.2.0",
     "@astrojs/tailwind": "^5.1.0",
-    "@astropub/md": "^1.0.0",
     "@tailwindcss/typography": "^0.5.15",
+    "@types/bun": "^1.1.10",
     "@types/node": "^22.5.4",
-    "@unpic/astro": "^0.0.47",
     "astro": "^4.15.4",
     "plaiceholder": "^3.0.0",
     "prettier": "^3.3.3",

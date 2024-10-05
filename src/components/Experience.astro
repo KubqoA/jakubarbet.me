@@ -17,20 +17,16 @@ const {company, logo, positions = [], skills = [], current = false} = Astro.prop
             {idx == 0 && current ? (
               <div class="mr-3 h-2 w-2 shrink-0 rounded-full border-[1.5px] border-white bg-blue-500 outline outline-2 outline-blue-500" />
             ) : (
-              <div
-                class={`mr-3 h-2 w-2 shrink-0 rounded-full ${idx == 0 ? 'bg-blue-300' : 'bg-blue-100'}`}
-              />
+              <div class={`mr-3 h-2 w-2 shrink-0 rounded-full ${idx == 0 ? 'bg-blue-300' : 'bg-blue-100'}`} />
             )}
-            <p class="text-nowrap  text-blue-700">
+            <p class="text-nowrap text-blue-700">
               {position.split(', ')[0]}, <wbr />
               {position.split(', ')[1]}
             </p>
             {positions.length > 0 && idx < positions.length - 1 && (
               <div class="absolute left-[3px] top-1/2 -z-10 h-2/3 w-[2px] bg-blue-100" />
             )}
-            {idx > 0 && (
-              <div class="absolute bottom-1/2 left-[3px] -z-10 h-2/3 w-[2px] bg-blue-100" />
-            )}
+            {idx > 0 && <div class="absolute bottom-1/2 left-[3px] -z-10 h-2/3 w-[2px] bg-blue-100" />}
           </div>
         ))}
       </div>
