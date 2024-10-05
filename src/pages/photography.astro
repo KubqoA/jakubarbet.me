@@ -1,18 +1,11 @@
 ---
 import {getCollection} from 'astro:content'
+import ArrowRight from '~/components/ArrowRight.astro'
 import ImageWithPlaceholder from '~/components/ImageWithPlaceholder.astro'
 import BaseLayout from '~/layouts/BaseLayout.astro'
-// import {getPlaceholder} from '~/utils/albums'
 
-// const galleries = await getCollection('albums').then((items) => items.sort((a, b) => b.data.date - a.data.date))
-const galleries = await getCollection('albums')
+const galleries = await getCollection('galleries')
 const sortedGalleries = galleries.sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-// const sortedGalleriesWithPlaceholder = await Promise.all(
-//   sortedGalleries.map(async (item) => ({
-//     ...item,
-//     placeholder: await getPlaceholder(item.data.cover.fsPath),
-//   })),
-// )
 ---
 
 <BaseLayout title="Photography" back="/" fullWidth>
@@ -22,13 +15,16 @@ const sortedGalleries = galleries.sort((a, b) => b.data.date.getTime() - a.data.
         <a class="group relative inline-block overflow-hidden rounded-md" href={`/gallery/${item.slug}`}>
           <div class="w-full">
             <ImageWithPlaceholder image={item.data.cover} alt={item.data.name} />
-            <div class="absolute inset-0 bg-black opacity-30 transition-opacity group-hover:opacity-10" />
+            <div class="absolute inset-0 bg-black opacity-20 transition-opacity group-hover:opacity-10" />
           </div>
-          <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black to-transparent p-4">
-            <h2 class="font-sans text-xl text-white md:text-2xl">{item.data.name}</h2>
-            <p class="mb-2 text-sm uppercase text-gray-300">
-              {item.data.date.toLocaleString('en-us', {year: 'numeric', month: 'short'})}
-            </p>
+          <div class="absolute inset-x-0 bottom-0 flex items-end justify-between bg-gradient-to-t from-black to-transparent p-4 pb-6">
+            <div>
+              <h2 class="font-sans text-xl text-white md:text-2xl">{item.data.name}</h2>
+              <p class="text-sm uppercase text-gray-300">
+                {item.data.date.toLocaleString('en-us', {year: 'numeric', month: 'short'})}
+              </p>
+            </div>
+            <ArrowRight class="h-6 w-6 text-white" />
           </div>
         </a>
       ))

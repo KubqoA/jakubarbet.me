@@ -1,6 +1,6 @@
 const baseUrl = 'https://drive.jakubarbet.me' // Seafile base URL
 const shareDir = 'f26af96f116b4d4cb72b' // Public Photos share link ID
-const photographyDir = './src/content/albums'
+const photographyDir = './src/content/galleries'
 
 type FileDirent = {
   file_path: string

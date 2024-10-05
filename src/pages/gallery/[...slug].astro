@@ -3,27 +3,28 @@ import {getCollection} from 'astro:content'
 import ImageWithPlaceholder from '~/components/ImageWithPlaceholder.astro'
 import Prose from '~/components/Prose.astro'
 import BaseLayout from '~/layouts/BaseLayout.astro'
-import {getAlbumImages} from '~/utils/albums'
+import {getGalleryImages} from '~/utils/galleries'
 
-export async function getStaticPaths() {
-  const galleryEntries = await getCollection('albums')
-  return galleryEntries.map((gallery) => ({
+export const getStaticPaths = async () =>
+  (await getCollection('galleries')).map((gallery) => ({
     params: {slug: gallery.slug},
     props: {gallery},
   }))
-}
 
 const {gallery} = Astro.props
 const {Content} = await gallery.render()
-const images = await getAlbumImages(gallery.slug)
+const images = await getGalleryImages(gallery.slug)
 ---
 
-<BaseLayout title={gallery.data.name} back="/photography" fullWidth>
-  <h2 class="mb-4 font-sans text-xl text-gray-950 md:text-2xl">{gallery.data.name}</h2>
+<BaseLayout title="Photography" back="/photography" fullWidth>
+  <h2 class="font-sans text-xl text-gray-950 md:text-2xl">{gallery.data.name}</h2>
+  <p class="mb-4 text-sm uppercase text-gray-600">
+    {gallery.data.date.toLocaleString('en-us', {year: 'numeric', month: 'short'})}
+  </p>
   <Prose class="-mt-2 mb-4 max-w-prose text-lg text-gray-800 md:text-xl"><Content /></Prose>
 
   <div
-    class="grid grid-flow-row-dense grid-cols-1 items-center gap-y-4 md:grid-cols-2 md:gap-4 lg:grid-cols-3 xl:grid-cols-4"
+    class="grid grid-flow-dense grid-cols-1 items-center gap-y-4 md:grid-cols-2 md:gap-4 lg:grid-cols-3 xl:grid-cols-4"
     data-gallery
   >
     {
@@ -32,7 +33,7 @@ const images = await getAlbumImages(gallery.slug)
           href={image.src}
           data-pswp-width={image.width}
           data-pswp-height={image.height}
-          class={`relative block h-min overflow-hidden rounded-md ${image.width > image.height ? 'md:col-span-2' : ''}`}
+          class={`relative block overflow-hidden rounded-md ${image.width > image.height ? 'md:col-span-2' : ''}`}
         >
           <ImageWithPlaceholder image={image} alt={`Image from ${gallery.data.name} album`} />
         </a>

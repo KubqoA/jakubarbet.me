@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "astro dev",
-    "build": "bun run photos.ts && astro build",
+    "build": "bun run fetchGalleries.ts && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -23,6 +23,7 @@
     "typescript": "^5.6.2"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.4",
     "photoswipe": "^5.4.4"
   }
 }
