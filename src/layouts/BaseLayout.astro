@@ -1,6 +1,7 @@
 ---
 import ExternalLink from '~/components/ExternalLink.astro'
 import ArrowLeft from '~/components/ArrowLeft.astro'
+import './base.css'
 
 const {title, back, fullWidth = false} = Astro.props
 ---
@@ -24,25 +25,23 @@ const {title, back, fullWidth = false} = Astro.props
     </noscript>
     <title>{title ? `${title} | Jakub Arbet` : 'Jakub Arbet'}</title>
   </head>
-  <body class="w-full">
-    <div class="container mx-auto px-6 sm:px-8 md:px-16">
+  <body class="text-primary w-full dark:bg-stone-900">
+    <div class="container mx-auto px-6 sm:px-8 lg:px-16">
       <div class={fullWidth ? '' : 'max-w-[1000px]'}>
         <header class="mb-8 mt-10 md:mb-12 md:mt-16 xl:mt-32 2xl:mt-40">
-          <h1
-            class={`font-monospace text-2xl md:text-4xl ${title ? 'text-gray-600 mb-1 md:mb-3' : 'text-gray-950 pb-9 md:pb-11'}`}
-          >
+          <h1 class={`font-monospace text-2xl md:text-4xl ${title ? 'text-secondary mb-1 md:mb-3' : 'pb-9 md:pb-11'}`}>
             Jakub Arbet
           </h1>
           {
             (title || back) && (
               <div class="flex h-8 flex-row items-center justify-between">
-                {title && <h2 class="font-monospace text-2xl text-gray-950 md:text-4xl">{title}</h2>}
+                {title && <h2 class="font-monospace text-2xl md:text-4xl">{title}</h2>}
                 {back && (
                   <a
                     href={back}
-                    class="flex items-center gap-1.5 font-monospace text-xl lowercase text-gray-600 hover:text-gray-950"
+                    class="text-secondary hover:text-primary group flex items-center gap-1.5 font-monospace text-xl lowercase transition-colors"
                   >
-                    <ArrowLeft class="mt-[2px] h-6 w-6" />
+                    <ArrowLeft class="mt-[2px] h-6 w-6 transform transition-transform group-hover:-translate-x-1" />
                     <span>Back</span>
                   </a>
                 )}
@@ -57,21 +56,27 @@ const {title, back, fullWidth = false} = Astro.props
           <div class="mb-6 flex flex-col space-y-3 md:flex-row md:space-x-5 md:space-y-0">
             <ExternalLink
               href="https://www.linkedin.com/in/jakub-arbet/"
-              class="block font-monospace lowercase text-gray-600"
+              class="text-secondary hover:text-primary block font-monospace lowercase transition-colors"
               iconSizeClass="size-3.5"
               iconClass="-ml-1">LinkedIn</ExternalLink
             >
-            <a href="/cv/" class="block font-monospace lowercase text-gray-600">CV</a>
+            <a href="/cv/" class="text-secondary hover:text-primary block font-monospace lowercase transition-colors"
+              >CV</a
+            >
             <ExternalLink
               href="https://github.com/KubqoA"
-              class="block font-monospace lowercase text-gray-600"
+              class="text-secondary hover:text-primary block font-monospace lowercase transition-colors"
               iconSizeClass="size-3.5"
               iconClass="-ml-1">GitHub</ExternalLink
             >
-            <a href="mailto:hi@jakubarbet.me?subject=Hi%20Jakub!" class="block font-monospace lowercase text-gray-600"
+            <a
+              href="mailto:hi@jakubarbet.me?subject=Hi%20Jakub!"
+              class="text-secondary hover:text-primary block font-monospace lowercase transition-colors"
               >hi(at)jakubarbet.me</a
             >
-            <a href="/gpg/" class="block font-monospace lowercase text-gray-600">GPG Public Key</a>
+            <a href="/gpg/" class="text-secondary hover:text-primary block font-monospace lowercase transition-colors"
+              >GPG Public Key</a
+            >
           </div>
           <p class="font-sans text-xs text-gray-500">
             The content for this site is licensed under <a

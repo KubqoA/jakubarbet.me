@@ -4,13 +4,23 @@ import ExternalLink from '../components/ExternalLink.astro'
 ---
 
 <BaseLayout>
-  <p class="mb-4 font-sans text-lg leading-8 text-gray-800 md:mb-2 md:text-xl md:leading-8">
+  <p class="mb-4 font-sans text-lg leading-8 md:mb-2 md:text-xl md:leading-8">
     Hi 👋, I'm 24, and currently working as Full Stack Engineer at
-    <ExternalLink href="https://betterstack.com" class="bg-gradient-to-r from-[#5B63D3] to-[#4449A9] bg-clip-text text-transparent" iconClass="text-[#4449A9]">Better Stack</ExternalLink>.
+    <ExternalLink href="https://betterstack.com" class="text-[#5B63D3]" iconClass="text-[#5B63D3]"
+      >Better Stack</ExternalLink
+    >.
   </p>
-  <p class="font-sans text-lg leading-8 text-gray-800 md:text-xl">
-    I also love <a href="/photography/" class="bg-gradient-to-r from-teal-600 to-emerald-600 bg-clip-text text-transparent">photography</a>,
-    creating <ExternalLink href="https://soundcloud.com/jakub-arbet" class="bg-gradient-to-r from-amber-500 to-amber-600 bg-clip-text text-transparent" iconClass="text-amber-600">music</ExternalLink>,
-    and occassionally <a href="/writing/" class="bg-gradient-to-r from-pink-600 to-pink-500 bg-clip-text text-transparent">writing</a> about things I find interesting.
+  <p class="font-sans text-lg leading-8 md:text-xl">
+    I also love <a
+      href="/photography/"
+      class="bg-gradient-to-r from-teal-600 to-emerald-600 bg-clip-text text-transparent">photography</a
+    >, creating <ExternalLink
+      href="https://soundcloud.com/jakub-arbet"
+      class="bg-gradient-to-r from-amber-500 to-amber-600 bg-clip-text text-transparent"
+      iconClass="text-amber-600">music</ExternalLink
+    >, and occassionally <a
+      href="/writing/"
+      class="bg-gradient-to-r from-pink-600 to-pink-500 bg-clip-text text-transparent">writing</a
+    > about things I find interesting.
   </p>
 </BaseLayout>

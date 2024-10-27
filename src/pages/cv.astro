@@ -1,12 +1,15 @@
 ---
 import betterstack from '~/assets/betterstack.png'
-import gbas from '~/assets/gbas.png'
-import gjgt from '~/assets/gjgt.png'
+import gbasLight from '~/assets/gbas-light.png'
+import gbasDark from '~/assets/gbas-dark.png'
 import microsoft from '~/assets/microsoft.svg'
-import muni from '~/assets/muni.svg'
+import muniLight from '~/assets/muni-light.svg'
+import muniDark from '~/assets/muni-dark.svg'
 import revolware from '~/assets/revolware.svg'
-import ut from '~/assets/ut.svg'
-import vacuumlabs from '~/assets/vacuumlabs.svg'
+import utLight from '~/assets/ut-light.svg'
+import utDark from '~/assets/ut-dark.svg'
+import vacuumlabsLight from '~/assets/vacuumlabs-light.svg'
+import vacuumlabsDark from '~/assets/vacuumlabs-dark.svg'
 
 import BaseLayout from '~/layouts/BaseLayout.astro'
 import Skill from '~/components/Skill.astro'
@@ -34,19 +37,19 @@ const skills = {
 
 <BaseLayout title="CV" back="/">
   <section class="mb-8 md:mb-12">
-    <p class="font-sans text-lg leading-8 text-gray-800 md:text-xl md:leading-8">
+    <p class="font-sans text-lg leading-8 md:text-xl md:leading-8">
       I'm a full-stack developer experienced in building backends with TypeScript, Rails, and Laravel, frontends with
       React, Vue and Tailwind, dApps on Cardano, managing Linux servers, and low-level programming in C.
     </p>
   </section>
   <section class="mb-8 md:mb-12">
-    <h3 class="mb-4 font-monospace text-2xl text-gray-950 md:text-3xl">Skills</h3>
+    <h3 class="mb-4 font-monospace text-2xl md:text-3xl">Skills</h3>
     <div class="grid grid-flow-row grid-cols-2 gap-x-8 gap-y-4 md:grid-flow-col md:grid-rows-6 lg:grid-rows-4">
       {Object.entries(skills).map(([skill, level]) => <Skill skill={skill} level={level} />)}
     </div>
   </section>
   <section class="mb-8 md:mb-12">
-    <h3 class="mb-4 font-monospace text-2xl text-gray-950 md:text-3xl">Experience</h3>
+    <h3 class="mb-4 font-monospace text-2xl md:text-3xl">Experience</h3>
     <div class="flex flex-col space-y-4">
       <Experience
         company="Better Stack"
@@ -57,7 +60,8 @@ const skills = {
       />
       <Experience
         company="Vacuumlabs"
-        logo={vacuumlabs}
+        logo={vacuumlabsLight}
+        darkLogo={vacuumlabsDark}
         positions={['Senior Software Engineer, July 2022 - June 2024']}
         skills={['TypeScript', 'Haskell', 'PostgreSQL', 'Prisma', 'AWS', 'Cardano', 'GraphQL', 'React']}
       >
@@ -67,7 +71,8 @@ const skills = {
       </Experience>
       <Experience
         company="Vacuumlabs"
-        logo={vacuumlabs}
+        logo={vacuumlabsLight}
+        darkLogo={vacuumlabsDark}
         positions={[
           'Mid Software Engineer, September 2021 - June 2022',
           'Junior Software Engineer, December 2020 - August 2021',
@@ -90,15 +95,6 @@ const skills = {
         program. As part of the program I led several webinars for teachers in Slovakia about Azure and security.
       </Experience>
       <Experience
-        company="GJGT"
-        logo={gjgt}
-        positions={['Full-Stack Developer, August 2019 - September 2019']}
-        skills={['Laravel', 'HTML/CSS']}
-      >
-        New webpage for a high school in Slovakia in a collaboration with a designer from Tochka. It's powered by a
-        custom CMS written in Laravel with frontend based on the provided design.
-      </Experience>
-      <Experience
         company="Revolware"
         logo={revolware}
         positions={['Developer and Server Admin, November 2017 - June 2020']}
@@ -110,22 +106,29 @@ const skills = {
     </div>
   </section>
   <section>
-    <h3 class="mb-4 font-monospace text-2xl text-gray-950 md:text-3xl">Education</h3>
+    <h3 class="mb-4 font-monospace text-2xl md:text-3xl">Education</h3>
     <div class="flex flex-col space-y-4">
       <Experience
         company="Masaryk University Faculty of Informatics"
-        logo={muni}
-        positions={["Bachelor's degree in Informatics, 2020 - Current"]}
-        current
+        logo={muniLight}
+        darkLogo={muniDark}
+        positions={['Coursework towards Bachelors of Informatics, 2020 - 2024']}
       >
-        In the second year of my studies I was a seminar tutor of introductory functional programming course.
+        Completed 3 years of studies. In the second year of my studies I was a seminar tutor of introductory functional
+        programming course. Paused my studies to work full-time.
       </Experience>
       <Experience
         company="University of Tartu Institute of Computer Science"
-        logo={ut}
+        logo={utLight}
+        darkLogo={utDark}
         positions={['Erasmus Exchange, 2022']}
       />
-      <Experience company="Milan Hodža Bilingual Grammar School" logo={gbas} positions={['High School, 2015 - 2020']}>
+      <Experience
+        company="Milan Hodža Bilingual Grammar School"
+        logo={gbasLight}
+        darkLogo={gbasDark}
+        positions={['High School, 2015 - 2020']}
+      >
         Finished my studies with an A from English language state exam with a technical specialization at C1 level.
       </Experience>
     </div>

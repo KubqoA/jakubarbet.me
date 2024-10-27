@@ -33,9 +33,10 @@ const convertToReadablePath = (src: string) => {
 interface Props {
   image: ImageMetadata
   alt: string
+  class?: string
 }
 
-const {image, alt} = Astro.props
+const {image, alt, class: className} = Astro.props
 const placeholderStyle = await getPlaceholder(convertToReadablePath(image.src))
 ---
 
@@ -47,7 +48,7 @@ const placeholderStyle = await getPlaceholder(convertToReadablePath(image.src))
     quality="mid"
     densities={[1, 2]}
     width={image.width > image.height ? 1000 : 500}
-    class="w-full"
+    class:list={['w-full', className]}
   />
   <div class="absolute inset-0 -z-10 h-full w-full scale-150 transform blur-2xl filter" style={placeholderStyle}></div>
 </div>

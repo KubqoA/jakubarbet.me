@@ -9,17 +9,21 @@ const sortedGalleries = galleries.sort((a, b) => b.data.date.getTime() - a.data.
 ---
 
 <BaseLayout title="Photography" back="/" fullWidth>
-  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
     {
       sortedGalleries.map((item) => (
         <a class="group relative inline-block overflow-hidden rounded-md" href={`/gallery/${item.slug}`}>
           <div class="w-full">
-            <ImageWithPlaceholder image={item.data.cover} alt={item.data.name} />
-            <div class="absolute inset-0 bg-black opacity-20 transition-opacity group-hover:opacity-10" />
+            <ImageWithPlaceholder
+              image={item.data.cover}
+              alt={item.data.name}
+              class="transform object-cover transition ease-in-out group-hover:scale-105"
+            />
+            <div class="absolute inset-0 bg-black opacity-15 transition-opacity group-hover:opacity-5" />
           </div>
-          <div class="absolute inset-x-0 bottom-0 flex items-end justify-between bg-gradient-to-t from-black to-transparent p-4 pb-6">
+          <div class="absolute inset-x-0 bottom-0 flex items-end justify-between bg-gradient-to-t from-black/80 to-transparent p-4 pb-6">
             <div>
-              <h2 class="font-sans text-xl text-white md:text-2xl">{item.data.name}</h2>
+              <h2 class="font-sans text-xl leading-tight text-white lg:text-2xl">{item.data.name}</h2>
               <p class="text-sm uppercase text-gray-300">
                 {item.data.date.toLocaleString('en-us', {year: 'numeric', month: 'short'})}
               </p>
