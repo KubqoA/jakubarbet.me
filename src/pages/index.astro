@@ -34,26 +34,39 @@ const skills = [
 ---
 
 <Layout>
-  <header class="mb-10">
-    <Image
-      src={me}
-      width="100"
-      height="100"
-      class="mb-6 rounded-full border-2 border-gray-300 dark:border-gray-700"
-      alt="Jakub Arbet"
-      loading="eager"
-      fetchpriority="high"
-    />
-    <div class="mb-4">
-      <h1 class="mb-1 text-xl font-semibold">Jakub Arbet</h1>
-      <p class="text-tertiary text-sm">Brno, Czech Republic</p>
+  <header class="mb-8">
+    <div class="mb-6 flex flex-col gap-4 print:flex-row print:items-center">
+      <Image
+        src={me}
+        width="100"
+        height="100"
+        class="rounded-full border-2 border-gray-300 dark:border-gray-700"
+        alt="Jakub Arbet"
+        loading="eager"
+        fetchpriority="high"
+      />
+      <div>
+        <h1 class="mb-1 text-xl font-semibold">Jakub Arbet</h1>
+        <p class="text-tertiary text-sm">Brno, Czech Republic</p>
+      </div>
+      <ul class="text-secondary hidden grow flex-col gap-1 text-right text-sm print:flex">
+        <li>
+          <a href="https://linkedin.com/in/jakub-arbet">LinkedIn</a>
+        </li>
+        <li>
+          <a href="https://github.com/KubqoA">GitHub</a>
+        </li>
+        <li>
+          <a href="mailto:hi@jakubarbet.me?subject=Hi%20Jakub">hi@jakubarbet.me</a>
+        </li>
+      </ul>
     </div>
     <div class="mb-6">
       <p class="text-secondary mb-1.5 leading-relaxed">
         I'm a full-stack software engineer with 5+ years of experience building web apps with TypeScript, Ruby on Rails,
         Laravel, React, and Vue.js. Currently looking for new opportunities.
       </p>
-      <p class="text-secondary leading-relaxed">
+      <p class="text-secondary leading-relaxed print:hidden">
         And in my free time I'm passionate about <a href="/photography" class="underline">photography</a> and
         <a href="https://soundcloud.com/jakub-arbet" target="_blank" rel="noopener noreferrer" class="underline"
           >creating music</a
@@ -61,7 +74,7 @@ const skills = [
       </p>
     </div>
     <a
-      class="group inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+      class="group inline-flex items-center gap-1.5 rounded-xl border border-gray-300 bg-gray-100 px-3 py-1.5 transition hover:bg-gray-200 dark:border-gray-600 dark:bg-gray-700 hover:dark:bg-gray-800 print:hidden"
       href="https://linkedin.com/in/jakub-arbet"
       target="_blank"
       rel="noopener noreferrer"
@@ -85,12 +98,12 @@ const skills = [
     <Skills skills={skills} />
   </section>
   <section class="mb-8">
-    <h2 class="mb-4 text-lg">Experience</h2>
+    <h2 class="mb-4 text-lg">Work Experience</h2>
     <Experience
       logo={betterstackLight}
       darkLogo={betterstackDark}
       position="Full Stack Engineer at Better Stack"
-      description="Built and deployed command palette feature for the platform. Stabilized Vue.js and Hotwire integration to improve system reliability. Redesigned oncall override functionality. Led technical interviews for 100+ engineering candidates."
+      description="I built and deployed command palette for the whole product, stabilized Vue.js and Hotwire integration to improve frontend reliability, and I helped improve the oncall scheduling system by introducing proper overrides. I also led technical interviews for 100+ engineering candidates."
       startDate="Aug 2024"
       endDate="Jun 2025"
       skills={['Ruby on Rails', 'Vue.js', 'Hotwire', 'PostgreSQL']}
@@ -99,10 +112,10 @@ const skills = [
       logo={vacuumlabsLight}
       darkLogo={vacuumlabsDark}
       position="Senior Software Engineer at Vacuumlabs"
-      description=" I helped building one of the first decentralized exchanges on top of Cardano blockchain. My responsibility was the architecture of the off-chain components of the smart contracts, and providing domain knowledge to help make technological and business decisions."
+      description="I helped building one of the first decentralized exchanges on top of Cardano blockchain. My responsibility was the architecture of the off-chain components of the smart contracts, and providing domain knowledge to help make technological and business decisions."
       startDate="Jul 2022"
       endDate="Jun 2024"
-      skills={['TypeScript', 'React', 'PostgreSQL', 'AWS', 'Cardano', 'GraphQL', 'Haskell']}
+      skills={['TypeScript', 'React', 'PostgreSQL', 'Cardano', 'GraphQL', 'Haskell']}
     />
     <Experience
       logo={vacuumlabsLight}
@@ -117,7 +130,7 @@ const skills = [
       logo={vacuumlabsLight}
       darkLogo={vacuumlabsDark}
       position="Junior Software Engineer at Vacuumlabs"
-      description="Rychlotest Covid, covid testing with good UX, was the first product I worked on. I helped modernize the UI, and I introduced granular permission system to the application. "
+      description="The first product I worked on was Rychlotest Covid, covid testing with good UX. I helped modernize the UI, and I introduced granular permission system to the application. "
       startDate="Dec 2020"
       endDate="Aug 2021"
       skills={['TypeScript', 'React', 'PostgreSQL', 'Heroku']}
@@ -137,15 +150,16 @@ const skills = [
       logo={muniLight}
       darkLogo={muniDark}
       position="Coursework towards Bachelors of Informatics at FI MUNI"
-      description="Completed 3 years of studies. In the second year of my studies I was a seminar tutor of introductory functional programming course. Paused my studies to work full-time."
-      startDate="2020"
-      endDate="2024"
+      description="Completed 3 years of studies, including role as seminar tutor for functional programming course. Chose to pause my studies to prioritize full-time software engineering career to gain more practical industry experience."
+      startDate="Sep 2020"
+      endDate="Jun 2024"
     />
     <Experience
       logo={utLight}
       darkLogo={utDark}
       position="Erasmus Exchange at University of Tartu Institute of Computer Science"
-      startDate="2022"
+      startDate="Jan 2022"
+      endDate="Jun 2022"
     />
     <Experience
       logo={microsoft}
