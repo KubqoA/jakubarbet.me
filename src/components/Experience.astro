@@ -15,9 +15,9 @@ const {logo, darkLogo, position, description, startDate, endDate, skills} = Astr
 ---
 
 <div class="mb-6">
-  <div class="mb-1 inline-flex items-center gap-2">
-    <Image src={logo} alt="" loading="eager" class="size-4" class:list={{'dark:hidden': darkLogo}} />
-    {darkLogo && <Image src={darkLogo} alt="" loading="eager" class="hidden size-4 dark:block" />}
+  <div class="mb-1 inline-flex items-start gap-2">
+    <Image src={logo} alt="" loading="eager" class="mt-[4px] size-4" class:list={{'dark:hidden': darkLogo}} />
+    {darkLogo && <Image src={darkLogo} alt="" loading="eager" class="mt-[4px] hidden size-4 dark:block" />}
     <h2 class="">{position}</h2>
   </div>
   <div class="ml-6">
