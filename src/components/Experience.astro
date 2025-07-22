@@ -1,0 +1,30 @@
+---
+import {Image} from 'astro:assets'
+
+interface Props {
+  logo: ImageMetadata
+  darkLogo?: ImageMetadata
+  position: string
+  description?: string
+  skills?: string[]
+  startDate: string
+  endDate?: string
+}
+
+const {logo, darkLogo, position, description, startDate, endDate, skills} = Astro.props
+---
+
+<div class="mb-6">
+  <div class="mb-1 inline-flex items-center gap-2">
+    <Image src={logo} alt="" loading="eager" class="size-4" class:list={{'dark:hidden': darkLogo}} />
+    {darkLogo && <Image src={darkLogo} alt="" loading="eager" class="hidden size-4 dark:block" />}
+    <h2 class="">{position}</h2>
+  </div>
+  <div class="ml-6">
+    {description && <p class="text-secondary mb-1 leading-relaxed">{description}</p>}
+    <p class="text-tertiary mb-2">
+      {startDate}{endDate && ` - ${endDate}`}
+      {skills && <span>&middot; {skills.join(', ')}</span>}
+    </p>
+  </div>
+</div>
