@@ -1,9 +1,11 @@
 ---
 import {Image} from 'astro:assets'
 
-import Layout from '../layouts/Layout.astro'
-import Skills from '../components/Skills.astro'
+import ArrowRight from '../components/ArrowRight.astro'
 import Experience from '../components/Experience.astro'
+import Section from '../components/Section.astro'
+import Skills from '../components/Skills.astro'
+import Layout from '../layouts/Layout.astro'
 
 import me from '../assets/me.jpg'
 import betterstackLight from '../assets/betterstack-light.svg'
@@ -16,25 +18,10 @@ import muniDark from '../assets/muni-dark.svg'
 import utLight from '../assets/ut-light.svg'
 import utDark from '../assets/ut-dark.svg'
 import microsoft from '../assets/microsoft.svg'
-
-const skills = [
-  {name: 'TypeScript', level: 5},
-  {name: 'Ruby on Rails', level: 4},
-  {name: 'Linux', level: 4},
-  {name: 'PostgreSQL', level: 4},
-  {name: 'Nix', level: 3},
-  {name: 'React', level: 3},
-  {name: 'Vue.js', level: 3},
-  {name: 'Laravel', level: 3},
-  {name: 'Python', level: 3},
-  {name: 'Cardano', level: 3},
-  {name: 'Haskell', level: 2},
-  {name: 'C', level: 2},
-]
 ---
 
-<Layout>
-  <header class="mb-8">
+<Layout class="animate-fade-in-up">
+  <header>
     <div class="mb-6 flex flex-col gap-4 print:flex-row print:items-center">
       <Image
         src={me}
@@ -80,94 +67,88 @@ const skills = [
       rel="noopener noreferrer"
     >
       <span>Get in touch</span>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-        class="size-4 transition group-hover:translate-x-[2px]"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z"
-          clip-rule="evenodd"></path>
-      </svg>
+      <ArrowRight class="size-4 transition group-hover:translate-x-[2px]" />
     </a>
   </header>
-  <section class="mb-8">
-    <h2 class="mb-4 text-lg">Skills</h2>
-    <Skills skills={skills} />
-  </section>
-  <section class="mb-8">
-    <h2 class="mb-4 text-lg">Work Experience</h2>
-    <Experience
-      logo={betterstackLight}
-      darkLogo={betterstackDark}
-      position="Full Stack Engineer at Better Stack"
-      description="I built and deployed command palette for the whole product, stabilized Vue.js and Hotwire integration to improve frontend reliability, and I helped improve the oncall scheduling system by introducing proper overrides. I also led technical interviews for 100+ engineering candidates."
-      startDate="Aug 2024"
-      endDate="Jun 2025"
-      skills={['Ruby on Rails', 'Vue.js', 'Hotwire', 'PostgreSQL']}
-    />
-    <Experience
-      logo={vacuumlabsLight}
-      darkLogo={vacuumlabsDark}
-      position="Senior Software Engineer at Vacuumlabs"
-      description="I helped building one of the first decentralized exchanges on top of Cardano blockchain. My responsibility was the architecture of the off-chain components of the smart contracts, and providing domain knowledge to help make technological and business decisions."
-      startDate="Jul 2022"
-      endDate="Jun 2024"
-      skills={['TypeScript', 'React', 'PostgreSQL', 'Cardano', 'GraphQL', 'Haskell']}
-    />
-    <Experience
-      logo={vacuumlabsLight}
-      darkLogo={vacuumlabsDark}
-      position="Mid Software Engineer at Vacuumlabs"
-      description="I worked on Cardano application for the Ledger hardware wallet, written in embedded C. This project helped me understand blockchains in general and the ins and outs of Cardano."
-      startDate="Sep 2021"
-      endDate="Jun 2022"
-      skills={['TypeScript', 'C', 'Cardano']}
-    />
-    <Experience
-      logo={vacuumlabsLight}
-      darkLogo={vacuumlabsDark}
-      position="Junior Software Engineer at Vacuumlabs"
-      description="The first product I worked on was Rychlotest Covid, covid testing with good UX. I helped modernize the UI, and I introduced granular permission system to the application. "
-      startDate="Dec 2020"
-      endDate="Aug 2021"
-      skills={['TypeScript', 'React', 'PostgreSQL', 'Heroku']}
-    />
-    <Experience
-      logo={revolware}
-      position="Developer and Server Admin at Revolware"
-      description=" I worked mainly on Laravel backends for client and in-house applications. I also started the company's Linux server used for self-hosted web, mail, file storage, and private Git hosting for projects, with CI/CD baked in."
-      startDate="Nov 2017"
-      endDate="Jun 2020"
-      skills={['Laravel', 'Linux', 'Bash']}
-    />
-  </section>
-  <section>
-    <h2 class="mb-4 text-lg">Education</h2>
-    <Experience
-      logo={muniLight}
-      darkLogo={muniDark}
-      position="Coursework towards Bachelors of Informatics at FI MUNI"
-      description="Completed 3 years of studies, including role as seminar tutor for functional programming course. Chose to pause my studies to prioritize full-time software engineering career to gain more practical industry experience."
-      startDate="Sep 2020"
-      endDate="Jun 2024"
-    />
-    <Experience
-      logo={utLight}
-      darkLogo={utDark}
-      position="Erasmus Exchange at University of Tartu Institute of Computer Science"
-      startDate="Jan 2022"
-      endDate="Jun 2022"
-    />
-    <Experience
-      logo={microsoft}
-      position="Learning programs at Microsoft"
-      startDate="Jan 2017"
-      endDate="Jan 2021"
-      description={`I participated in a learning program for high school students called "Študentské trénerské centrum", where I improved my presentation and soft skills. After graduating I got promoted to the Learn Student Ambassador program. As part of the program I led several webinars for teachers in Slovakia about Azure and security.`}
-      skills={['Azure', 'Security', 'Presentation', 'Soft skills']}
-    />
-  </section>
+
+  <Section title="Skills">
+    <Skills />
+  </Section>
+
+  <Section title="Work Experience">
+    <div class="flex flex-col gap-6">
+      <Experience
+        logo={betterstackLight}
+        darkLogo={betterstackDark}
+        position="Full Stack Engineer at Better Stack"
+        description="I built and deployed command palette for the whole product, stabilized Vue.js and Hotwire integration to improve frontend reliability, and I helped improve the oncall scheduling system by introducing proper overrides. I also led technical interviews for 100+ engineering candidates."
+        startDate="Aug 2024"
+        endDate="Jun 2025"
+        skills={['Ruby on Rails', 'Vue.js', 'Hotwire', 'PostgreSQL']}
+      />
+      <Experience
+        logo={vacuumlabsLight}
+        darkLogo={vacuumlabsDark}
+        position="Senior Software Engineer at Vacuumlabs"
+        description="I helped building one of the first decentralized exchanges on top of Cardano blockchain. My responsibility was the architecture of the off-chain components of the smart contracts, and providing domain knowledge to help make technological and business decisions."
+        startDate="Jul 2022"
+        endDate="Jun 2024"
+        skills={['TypeScript', 'React', 'PostgreSQL', 'Cardano', 'GraphQL', 'Haskell']}
+      />
+      <Experience
+        logo={vacuumlabsLight}
+        darkLogo={vacuumlabsDark}
+        position="Mid Software Engineer at Vacuumlabs"
+        description="I worked on Cardano application for the Ledger hardware wallet, written in embedded C. This project helped me understand blockchains in general and the ins and outs of Cardano."
+        startDate="Sep 2021"
+        endDate="Jun 2022"
+        skills={['TypeScript', 'C', 'Cardano']}
+      />
+      <Experience
+        logo={vacuumlabsLight}
+        darkLogo={vacuumlabsDark}
+        position="Junior Software Engineer at Vacuumlabs"
+        description="The first product I worked on was Rychlotest Covid, covid testing with good UX. I helped modernize the UI, and I introduced granular permission system to the application. "
+        startDate="Dec 2020"
+        endDate="Aug 2021"
+        skills={['TypeScript', 'React', 'PostgreSQL', 'Heroku']}
+      />
+      <Experience
+        logo={revolware}
+        position="Developer and Server Admin at Revolware"
+        description=" I worked mainly on Laravel backends for client and in-house applications. I also started the company's Linux server used for self-hosted web, mail, file storage, and private Git hosting for projects, with CI/CD baked in."
+        startDate="Nov 2017"
+        endDate="Jun 2020"
+        skills={['Laravel', 'Linux', 'Bash']}
+      />
+    </div>
+  </Section>
+
+  <Section title="Education">
+    <div class="flex flex-col gap-6">
+      <Experience
+        logo={muniLight}
+        darkLogo={muniDark}
+        position="Coursework towards Bachelors of Informatics at FI MUNI"
+        description="Completed 3 years of studies, including role as seminar tutor for functional programming course. Chose to pause my studies to prioritize full-time software engineering career to gain more practical industry experience."
+        startDate="Sep 2020"
+        endDate="Jun 2024"
+      />
+      <Experience
+        logo={utLight}
+        darkLogo={utDark}
+        position="Erasmus Exchange at University of Tartu Institute of Computer Science"
+        startDate="Jan 2022"
+        endDate="Jun 2022"
+      />
+      <Experience
+        logo={microsoft}
+        position="Learning programs at Microsoft"
+        startDate="Jan 2017"
+        endDate="Jan 2021"
+        description={`I participated in a learning program for high school students called "Študentské trénerské centrum", where I improved my presentation and soft skills. After graduating I got promoted to the Learn Student Ambassador program. As part of the program I led several webinars for teachers in Slovakia about Azure and security.`}
+        skills={['Azure', 'Security', 'Presentation', 'Soft skills']}
+      />
+    </div>
+  </Section>
 </Layout>

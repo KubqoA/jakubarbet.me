@@ -14,7 +14,7 @@ interface Props {
 const {logo, darkLogo, position, description, startDate, endDate, skills} = Astro.props
 ---
 
-<div class="mb-6 break-inside-avoid">
+<div class="break-inside-avoid">
   <div class="mb-1 inline-flex items-start gap-2">
     <Image src={logo} alt="" loading="eager" class="mt-[4px] size-4" class:list={{'dark:hidden': darkLogo}} />
     {darkLogo && <Image src={darkLogo} alt="" loading="eager" class="mt-[4px] hidden size-4 dark:block" />}
