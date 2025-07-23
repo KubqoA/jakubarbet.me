@@ -1,7 +1,9 @@
 @import 'tailwindcss';
+@plugin "@tailwindcss/typography";
 
 @theme {
   --font-sans: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  /* Alias zinc to gray */
   --color-gray-50: oklch(0.985 0 0);
   --color-gray-100: oklch(0.967 0.001 286.375);
   --color-gray-200: oklch(0.92 0.004 286.32);
