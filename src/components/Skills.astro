@@ -11,8 +11,11 @@ const {skills} = Astro.props
     skills.map((skill) => (
       <div class="flex items-center gap-2">
         <div class="flex flex-row items-center space-x-1 sm:space-x-2">
-          {Array.from({length: skill.level}, () => (
-            <div class="h-2 w-2 rounded-xs bg-gray-700 sm:h-3 sm:w-3 dark:bg-gray-400" />
+          {Array.from({length: skill.level}, (_, i) => (
+            <div
+              class="animate-skill-level dark:animate-skill-level-dark h-2 w-2 rounded-xs bg-gray-200 sm:h-3 sm:w-3 dark:bg-gray-700 print:bg-gray-700!"
+              class:list={`animation-delay-${250 + i * 100}`}
+            />
           ))}
           {Array.from({length: 5 - skill.level}, () => (
             <div class="h-2 w-2 rounded-xs bg-gray-200 sm:h-3 sm:w-3 dark:bg-gray-700" />
