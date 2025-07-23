@@ -25,26 +25,6 @@
       transform: translateY(0);
     }
   }
-
-  --animate-skill-level: skill-level 0.1s ease-out forwards;
-  @keyframes skill-level {
-    0% {
-      background-color: var(--color-gray-200);
-    }
-    100% {
-      background-color: var(--color-gray-700);
-    }
-  }
-
-  --animate-skill-level-dark: skill-level-dark 0.1s ease-out forwards;
-  @keyframes skill-level-dark {
-    0% {
-      background-color: var(--color-gray-700);
-    }
-    100% {
-      background-color: var(--color-gray-400);
-    }
-  }
 }
 
 .text-primary {
@@ -58,8 +38,3 @@
 .text-tertiary {
   @apply text-gray-500;
 }
-
-@utility animation-delay-* {
-  animation-delay: calc(--value(integer) * 1ms) !important;
-}
-@source inline("animation-delay-{250..650..100}");
