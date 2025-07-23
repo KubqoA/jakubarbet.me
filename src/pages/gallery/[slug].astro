@@ -18,18 +18,20 @@ const images = await getGalleryImages(gallery.slug)
 
 <Layout class="animate-fade-in-up" title={gallery.data.name} fullWidth>
   <header>
-    <h1 class="mt-28 mb-2 text-xl font-semibold">
+    <h1 class="text-xl font-semibold">
       <a href="/" class="text-tertiary">Jakub Arbet</a>
       <span class="text-tertiary">/</span>
       <a href="/photography" class="text-tertiary">Photography</a>
       <span class="text-tertiary">/</span>
       {gallery.data.name}
     </h1>
-    <p class="text-secondary">
+  </header>
+  <div>
+    <Prose class="mb-2 max-w-xl !leading-normal"><Content /></Prose>
+    <p class="text-tertiary">
       {gallery.data.date.toLocaleString('en-us', {year: 'numeric', month: 'short'})}
     </p>
-  </header>
-  <Prose class="max-w-2xl !leading-normal"><Content /></Prose>
+  </div>
 
   <div class="grid grid-flow-dense grid-cols-2 items-center gap-4 md:grid-cols-3 lg:grid-cols-4" data-gallery>
     {
