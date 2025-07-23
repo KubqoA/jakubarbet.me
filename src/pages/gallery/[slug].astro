@@ -1,0 +1,60 @@
+---
+import {getCollection} from 'astro:content'
+import ImageWithPlaceholder from '@/components/ImageWithPlaceholder.astro'
+import Prose from '@/components/Prose.astro'
+import Layout from '@/layouts/Layout.astro'
+import {getGalleryImages} from '@/utils/galleries'
+
+export const getStaticPaths = async () =>
+  (await getCollection('galleries')).map((gallery) => ({
+    params: {slug: gallery.slug},
+    props: {gallery},
+  }))
+
+const {gallery} = Astro.props
+const {Content} = await gallery.render()
+const images = await getGalleryImages(gallery.slug)
+---
+
+<Layout class="animate-fade-in-up" title={gallery.data.name} fullWidth>
+  <header>
+    <h1 class="mt-28 mb-2 text-xl font-semibold">
+      <a href="/" class="text-tertiary">Jakub Arbet</a>
+      <span class="text-tertiary">/</span>
+      <a href="/photography" class="text-tertiary">Photography</a>
+      <span class="text-tertiary">/</span>
+      {gallery.data.name}
+    </h1>
+    <p class="text-secondary">
+      {gallery.data.date.toLocaleString('en-us', {year: 'numeric', month: 'short'})}
+    </p>
+  </header>
+  <Prose class="max-w-2xl !leading-normal"><Content /></Prose>
+
+  <div class="grid grid-flow-dense grid-cols-2 items-center gap-4 md:grid-cols-3 lg:grid-cols-4" data-gallery>
+    {
+      images.map((image) => (
+        <a
+          href={image.src}
+          data-pswp-width={image.width}
+          data-pswp-height={image.height}
+          class={`relative block overflow-hidden rounded-md ${image.width > image.height ? 'col-span-2' : ''}`}
+        >
+          <ImageWithPlaceholder src={image} alt="" />
+        </a>
+      ))
+    }
+  </div>
+</Layout>
+
+<script>
+  import PhotoSwipeLightbox from 'photoswipe/lightbox'
+  import 'photoswipe/style.css'
+
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: '[data-gallery]',
+    children: 'a',
+    pswpModule: () => import('photoswipe'),
+  })
+  lightbox.init()
+</script>

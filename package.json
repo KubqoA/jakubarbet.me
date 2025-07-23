@@ -4,13 +4,16 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "bun run fetchGalleries.ts && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
+    "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.1.11",
     "astro": "^5.12.0",
+    "photoswipe": "^5.4.4",
+    "plaiceholder": "^3.0.0",
     "tailwindcss": "^4.1.11"
   },
   "devDependencies": {

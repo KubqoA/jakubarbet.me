@@ -1,5 +1,45 @@
 ---
-import Layout from '../layouts/Layout.astro'
+import {getCollection} from 'astro:content'
+
+import ArrowRight from '@/components/ArrowRight.astro'
+import ImageWithPlaceholder from '@/components/ImageWithPlaceholder.astro'
+import Layout from '@/layouts/Layout.astro'
+
+const galleries = await getCollection('galleries')
+const sortedGalleries = galleries.sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
 ---
 
-<Layout />
+<Layout class="animate-fade-in-up" title="Photography" fullWidth>
+  <header>
+    <h1 class="mt-28 text-xl font-semibold">
+      <a href="/" class="text-tertiary">Jakub Arbet</a>
+      <span class="text-tertiary">/</span>
+      Photography
+    </h1>
+  </header>
+  <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+    {
+      sortedGalleries.map((item) => (
+        <a class="group relative inline-block overflow-hidden rounded-md" href={`/gallery/${item.slug}`}>
+          <div class="w-full">
+            <ImageWithPlaceholder
+              src={item.data.cover}
+              alt=""
+              class="transform object-cover transition ease-in-out group-hover:scale-105"
+            />
+            <div class="absolute inset-0 bg-black opacity-15 transition-opacity group-hover:opacity-5" />
+          </div>
+          <div class="absolute inset-x-0 bottom-0 flex items-end justify-between bg-gradient-to-t from-black/80 to-transparent px-4 py-6">
+            <div>
+              <h2 class="font-sans text-xl leading-tight font-semibold text-white">{item.data.name}</h2>
+              <p class="text-sm text-gray-300">
+                {item.data.date.toLocaleString('en-us', {year: 'numeric', month: 'short'})}
+              </p>
+            </div>
+            <ArrowRight class="size-4 transition group-hover:translate-x-[2px]" />
+          </div>
+        </a>
+      ))
+    }
+  </div>
+</Layout>

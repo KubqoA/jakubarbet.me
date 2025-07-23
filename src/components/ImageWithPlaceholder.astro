@@ -1,0 +1,47 @@
+---
+import path from 'node:path'
+import {Image} from 'astro:assets'
+import {getPlaiceholder} from 'plaiceholder'
+import {readFile} from 'node:fs/promises'
+
+const getPlaceholder = async (path: string) => {
+  const buffer = await readFile(path)
+  const {css} = await getPlaiceholder(buffer)
+  return css
+}
+
+const convertToReadablePath = (src: string) => {
+  // Check if the src is a local file system path
+  if (src.startsWith('/@fs/')) {
+    return src.replace(/^\/\@fs/, '').split('?')[0]
+  }
+
+  // Check if the src is an Astro-generated path
+  if (src.startsWith('/_astro/')) {
+    return path.join(process.cwd(), 'dist', src)
+  }
+  return src
+}
+
+interface Props {
+  src: ImageMetadata
+  alt: string
+  class?: string
+}
+
+const {src, alt, class: className} = Astro.props
+const placeholderStyle = await getPlaceholder(convertToReadablePath(src.src))
+---
+
+<div class="relative w-full overflow-hidden">
+  <Image
+    src={src}
+    alt={alt}
+    format="avif"
+    quality="mid"
+    densities={[1, 2]}
+    width={src.width > src.height ? 1000 : 500}
+    class:list={['w-full', className]}
+  />
+  <div class="absolute inset-0 -z-10 h-full w-full scale-150 transform blur-2xl filter" style={placeholderStyle}></div>
+</div>
