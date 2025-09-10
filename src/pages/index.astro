@@ -8,6 +8,8 @@ import Skills from '../components/Skills.astro'
 import Layout from '../layouts/Layout.astro'
 
 import me from '../assets/me.jpg'
+import faceupLight from '../assets/faceup-light.svg'
+import faceupDark from '../assets/faceup-dark.svg'
 import betterstackLight from '../assets/betterstack-light.svg'
 import betterstackDark from '../assets/betterstack-dark.svg'
 import vacuumlabsLight from '../assets/vacuumlabs-light.svg'
@@ -51,7 +53,12 @@ import microsoft from '../assets/microsoft.svg'
     <div class="mb-6 print:mb-0">
       <p class="text-secondary mb-1.5 leading-relaxed print:mb-0">
         I'm a full-stack software engineer with 5+ years of experience building web apps with TypeScript, Ruby on Rails,
-        Laravel, React, and Vue.js. Currently looking for new opportunities.
+        Laravel, React, and Vue.js. Currently working at <a
+          href="https://www.faceup.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="underline">FaceUp</a
+        >.
       </p>
       <p class="text-secondary leading-relaxed print:hidden">
         And in my free time I'm passionate about <a href="/photography" class="underline">photography</a> and
@@ -77,6 +84,14 @@ import microsoft from '../assets/microsoft.svg'
 
   <Section title="Work Experience">
     <div class="flex flex-col gap-6">
+      <Experience
+        logo={faceupLight}
+        darkLogo={faceupDark}
+        position="Senior Backend Engineer at FaceUp"
+        startDate="Oct 2025"
+        endDate="Present"
+        skills={['Node.js', 'TypeScript', 'PostgreSQL', 'GraphQL']}
+      />
       <Experience
         logo={betterstackLight}
         darkLogo={betterstackDark}
